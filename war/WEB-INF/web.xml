@@ -4,17 +4,7 @@
               http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee">
-
-  <!-- Servlets 
-  <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>com.gwt.server.GreetingServiceImpl</servlet-class>
-  </servlet>
   
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/gwt/greet</url-pattern>
-  </servlet-mapping>-->
   
   <!-- Default page to serve -->
   <welcome-file-list>
@@ -29,6 +19,16 @@
   <servlet-mapping>
     <servlet-name>jsonSermonData</servlet-name>
     <url-pattern>/gwt/sermones</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>SubmitSermonServiceImpl</servlet-name>
+    <servlet-class>com.gwt.server.SubmitSermonServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>SubmitSermonServiceImpl</servlet-name>
+    <url-pattern>/gwt/SubmitSermon</url-pattern>
   </servlet-mapping>
 
 </web-app>

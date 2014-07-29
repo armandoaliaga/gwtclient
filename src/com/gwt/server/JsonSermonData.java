@@ -21,7 +21,7 @@ import org.json.JSONException;
 
 public class JsonSermonData extends HttpServlet {
 
-	private static final String url = "http://10.0.0.6:8080/com.ServerPrincipal/api/v1/getSermones";
+	private static final String url = "http://10.0.0.15:8080/com.ServerPrincipal/api/v1/getSermones";
 	  
 	@Override
 	  protected void doGet(HttpServletRequest req, HttpServletResponse resp)

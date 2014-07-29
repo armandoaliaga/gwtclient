@@ -1,0 +1,360 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  Internal Error (constantPoolOop.cpp:91), pid=4584, tid=3628
+#  guarantee(error != (Symbol*)NULL) failed: tag mismatch with resolution error table
+#
+# JRE version: Java(TM) SE Runtime Environment (7.0_55-b13) (build 1.7.0_55-b13)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (24.55-b03 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.sun.com/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00000000095aa000):  JavaThread "Code server for gwt from Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36 on http://127.0.0.1:8888/Gwt.html?gwt.codesvr=127.0.0.1:9997 @ ozFWNy'/NxZP0MI," daemon [_thread_in_vm, id=3628, stack(0x000000000c820000,0x000000000c920000)]
+
+Stack: [0x000000000c820000,0x000000000c920000]
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  com.gwt.client.Gwt$2.onValueChange(Lcom/google/gwt/event/logical/shared/ValueChangeEvent;)V+40
+j  com.google.gwt.event.logical.shared.ValueChangeEvent.dispatch(Lcom/google/gwt/event/logical/shared/ValueChangeHandler;)V+2
+j  com.google.gwt.event.logical.shared.ValueChangeEvent.dispatch(Lcom/google/gwt/event/shared/EventHandler;)V+5
+j  com.google.gwt.event.shared.GwtEvent.dispatch(Ljava/lang/Object;)V+5
+j  com.google.web.bindery.event.shared.EventBus.dispatchEvent(Lcom/google/web/bindery/event/shared/Event;Ljava/lang/Object;)V+2
+j  com.google.web.bindery.event.shared.SimpleEventBus.doFire(Lcom/google/web/bindery/event/shared/Event;Ljava/lang/Object;)V+108
+j  com.google.web.bindery.event.shared.SimpleEventBus.fireEvent(Lcom/google/web/bindery/event/shared/Event;)V+3
+j  com.google.gwt.event.shared.HandlerManager.fireEvent(Lcom/google/gwt/event/shared/GwtEvent;)V+29
+j  com.google.gwt.user.client.ui.Widget.fireEvent(Lcom/google/gwt/event/shared/GwtEvent;)V+12
+j  com.sencha.gxt.widget.core.client.Component.fireEvent(Lcom/google/gwt/event/shared/GwtEvent;)V+10
+j  com.google.gwt.event.logical.shared.ValueChangeEvent.fire(Lcom/google/gwt/event/logical/shared/HasValueChangeHandlers;Ljava/lang/Object;)V+17
+j  com.sencha.gxt.widget.core.client.cell.CellComponent.setValue(Ljava/lang/Object;ZZ)V+45
+j  com.sencha.gxt.widget.core.client.cell.CellComponent$1.update(Ljava/lang/Object;)V+7
+j  com.sencha.gxt.cell.core.client.form.ToggleButtonCell.onClick(Lcom/google/gwt/cell/client/Cell$Context;Lcom/sencha/gxt/core/client/dom/XElement;Ljava/lang/Boolean;Lcom/google/gwt/dom/client/NativeEvent;Lcom/google/gwt/cell/client/ValueUpdater;)V+54
+j  com.sencha.gxt.cell.core.client.form.ToggleButtonCell.onClick(Lcom/google/gwt/cell/client/Cell$Context;Lcom/sencha/gxt/core/client/dom/XElement;Ljava/lang/Object;Lcom/google/gwt/dom/client/NativeEvent;Lcom/google/gwt/cell/client/ValueUpdater;)V+14
+j  com.sencha.gxt.cell.core.client.ButtonCell.onBrowserEvent(Lcom/google/gwt/cell/client/Cell$Context;Lcom/google/gwt/dom/client/Element;Ljava/lang/Object;Lcom/google/gwt/dom/client/NativeEvent;Lcom/google/gwt/cell/client/ValueUpdater;)V+68
+j  com.sencha.gxt.widget.core.client.cell.CellComponent.onBrowserEvent(Lcom/google/gwt/user/client/Event;)V+77
+j  com.sencha.gxt.widget.core.client.button.CellButtonBase.onBrowserEvent(Lcom/google/gwt/user/client/Event;)V+2
+j  com.google.gwt.user.client.DOM.dispatchEventImpl(Lcom/google/gwt/user/client/Event;Lcom/google/gwt/dom/client/Element;Lcom/google/gwt/user/client/EventListener;)V+23
+j  com.google.gwt.user.client.DOM.dispatchEvent(Lcom/google/gwt/user/client/Event;Lcom/google/gwt/dom/client/Element;Lcom/google/gwt/user/client/EventListener;)V+11
+j  com.google.gwt.user.client.impl.DOMImplStandard.dispatchEvent(Lcom/google/gwt/user/client/Event;)V+28
+j  sun.reflect.GeneratedMethodAccessor69.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+24
+J  java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+J  com.google.gwt.dev.shell.MethodDispatch.invoke(Lcom/google/gwt/dev/shell/JsValue;[Lcom/google/gwt/dev/shell/JsValue;Lcom/google/gwt/dev/shell/JsValue;)Z
+J  com.google.gwt.dev.shell.OophmSessionHandler.invoke(Lcom/google/gwt/dev/shell/BrowserChannelServer;Lcom/google/gwt/dev/shell/BrowserChannel$Value;I[Lcom/google/gwt/dev/shell/BrowserChannel$Value;)Lcom/google/gwt/dev/shell/BrowserChannel$SessionHandler$ExceptionOrReturnValue;
+J  com.google.gwt.dev.shell.ModuleSpaceOOPHM.doInvoke(Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Class;[Ljava/lang/Object;)Lcom/google/gwt/dev/shell/JsValue;
+J  com.google.gwt.dev.shell.ModuleSpace.invokeNative(Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Class;[Ljava/lang/Object;)Lcom/google/gwt/dev/shell/JsValue;
+j  com.google.gwt.dev.shell.ModuleSpace.invokeNativeObject(Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;+6
+j  com.google.gwt.dev.shell.JavaScriptHost.invokeNativeObject(Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;+7
+j  com.google.gwt.core.client.impl.Impl.apply(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;+38
+j  com.google.gwt.core.client.impl.Impl.entry0(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;+30
+j  sun.reflect.GeneratedMethodAccessor64.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+40
+J  java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+J  com.google.gwt.dev.shell.MethodDispatch.invoke(Lcom/google/gwt/dev/shell/JsValue;[Lcom/google/gwt/dev/shell/JsValue;Lcom/google/gwt/dev/shell/JsValue;)Z
+J  com.google.gwt.dev.shell.OophmSessionHandler.invoke(Lcom/google/gwt/dev/shell/BrowserChannelServer;Lcom/google/gwt/dev/shell/BrowserChannel$Value;I[Lcom/google/gwt/dev/shell/BrowserChannel$Value;)Lcom/google/gwt/dev/shell/BrowserChannel$SessionHandler$ExceptionOrReturnValue;
+j  com.google.gwt.dev.shell.BrowserChannelServer.reactToMessages(Lcom/google/gwt/dev/shell/BrowserChannelServer$SessionHandlerServer;)V+92
+j  com.google.gwt.dev.shell.BrowserChannelServer.processConnection()V+877
+j  com.google.gwt.dev.shell.BrowserChannelServer.run()V+1
+j  java.lang.Thread.run()V+11
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+=>0x00000000095aa000 JavaThread "Code server for gwt from Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36 on http://127.0.0.1:8888/Gwt.html?gwt.codesvr=127.0.0.1:9997 @ ozFWNy'/NxZP0MI," daemon [_thread_in_vm, id=3628, stack(0x000000000c820000,0x000000000c920000)]
+  0x00000000095aa800 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=4972, stack(0x000000000eaa0000,0x000000000eba0000)]
+  0x00000000095a8800 JavaThread "qtp889357943-32" [_thread_blocked, id=4188, stack(0x000000000c6e0000,0x000000000c7e0000)]
+  0x00000000095a7800 JavaThread "qtp889357943-31" [_thread_blocked, id=2912, stack(0x000000000c570000,0x000000000c670000)]
+  0x00000000095a7000 JavaThread "qtp889357943-30" [_thread_blocked, id=2200, stack(0x000000000c400000,0x000000000c500000)]
+  0x00000000095a6000 JavaThread "qtp889357943-29" [_thread_blocked, id=2160, stack(0x000000000c180000,0x000000000c280000)]
+  0x000000000adb3800 JavaThread "qtp889357943-28" [_thread_blocked, id=4228, stack(0x000000000a4b0000,0x000000000a5b0000)]
+  0x000000000ada6000 JavaThread "qtp889357943-27" [_thread_blocked, id=2228, stack(0x000000000c000000,0x000000000c100000)]
+  0x000000000adb3000 JavaThread "qtp889357943-26 Acceptor0 SelectChannelConnector@127.0.0.1:8888" [_thread_in_native, id=4888, stack(0x000000000be90000,0x000000000bf90000)]
+  0x0000000009f78800 JavaThread "qtp889357943-25 Selector0" [_thread_in_native, id=3480, stack(0x000000000bd60000,0x000000000be60000)]
+  0x000000000a135800 JavaThread "HashSessionScavenger-0" daemon [_thread_blocked, id=2264, stack(0x000000000bb50000,0x000000000bc50000)]
+  0x0000000009b49000 JavaThread "GC Daemon" daemon [_thread_blocked, id=2624, stack(0x000000000a5d0000,0x000000000a6d0000)]
+  0x0000000009543000 JavaThread "Code server listener" daemon [_thread_in_native, id=3292, stack(0x000000000aa20000,0x000000000ab20000)]
+  0x0000000009c61000 JavaThread "pool-1-thread-1" [_thread_blocked, id=3468, stack(0x000000000a7f0000,0x000000000a8f0000)]
+  0x00000000095d2800 JavaThread "Thread-2" daemon [_thread_blocked, id=3992, stack(0x0000000008210000,0x0000000008310000)]
+  0x0000000009367800 JavaThread "Thread-1" [_thread_in_native, id=3236, stack(0x000000000a390000,0x000000000a490000)]
+  0x000000000922d800 JavaThread "Service Thread" daemon [_thread_blocked, id=4720, stack(0x0000000009990000,0x0000000009a90000)]
+  0x000000000922b800 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=3396, stack(0x0000000009760000,0x0000000009860000)]
+  0x000000000741d800 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=3060, stack(0x0000000008ba0000,0x0000000008ca0000)]
+  0x0000000007418000 JavaThread "JDWP Command Reader" daemon [_thread_in_native, id=4432, stack(0x0000000002460000,0x0000000002560000)]
+  0x0000000007417800 JavaThread "JDWP Event Helper Thread" daemon [_thread_blocked, id=1924, stack(0x0000000009120000,0x0000000009220000)]
+  0x0000000007412000 JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_blocked, id=2748, stack(0x0000000008f50000,0x0000000009050000)]
+  0x0000000007400000 JavaThread "Attach Listener" daemon [_thread_blocked, id=5096, stack(0x0000000008750000,0x0000000008850000)]
+  0x00000000073f8800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=3776, stack(0x0000000008650000,0x0000000008750000)]
+  0x00000000073a4800 JavaThread "Finalizer" daemon [_thread_blocked, id=4680, stack(0x0000000008550000,0x0000000008650000)]
+  0x000000000739d800 JavaThread "Reference Handler" daemon [_thread_blocked, id=3600, stack(0x0000000008420000,0x0000000008520000)]
+  0x000000000235e800 JavaThread "main" [_thread_blocked, id=3160, stack(0x0000000002560000,0x0000000002660000)]
+
+Other Threads:
+  0x0000000007398000 VMThread [stack: 0x0000000008310000,0x0000000008410000] [id=2760]
+  0x000000000924b800 WatcherThread [stack: 0x0000000009890000,0x0000000009990000] [id=3904]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ PSYoungGen      total 116736K, used 41284K [0x00000000f5500000, 0x0000000100000000, 0x0000000100000000)
+  eden space 58368K, 66% used [0x00000000f5500000,0x00000000f7ae0a70,0x00000000f8e00000)
+  from space 58368K, 4% used [0x00000000fc700000,0x00000000fc970930,0x0000000100000000)
+  to   space 58368K, 0% used [0x00000000f8e00000,0x00000000f8e00000,0x00000000fc700000)
+ ParOldGen       total 167936K, used 120422K [0x00000000e0000000, 0x00000000ea400000, 0x00000000f5500000)
+  object space 167936K, 71% used [0x00000000e0000000,0x00000000e7599a28,0x00000000ea400000)
+ PSPermGen       total 45568K, used 34499K [0x00000000dae00000, 0x00000000dda80000, 0x00000000e0000000)
+  object space 45568K, 75% used [0x00000000dae00000,0x00000000dcfb0cd0,0x00000000dda80000)
+
+Card table byte_map: [0x0000000005660000,0x0000000005790000] byte_map_base: 0x0000000004f89000
+
+Polling page: 0x0000000000220000
+
+Code Cache  [0x0000000002660000, 0x0000000002c80000, 0x0000000005660000)
+ total_blobs=1896 nmethods=1443 adapters=413 free_code_cache=43025Kb largest_free_block=43911744
+
+Compilation events (10 events):
+Event: 574.592 Thread 0x000000000741d800 1651             com.google.gwt.dev.shell.BrowserChannelServer$ServerObjectRefFactory::getRefIdsForCleanup (8 bytes)
+Event: 574.594 Thread 0x000000000741d800 nmethod 1651 0x00000000028736d0 code [0x0000000002873820, 0x00000000028738c8]
+Event: 678.370 Thread 0x000000000922b800 1652             java.nio.channels.spi.AbstractSelector::isOpen (8 bytes)
+Event: 678.371 Thread 0x000000000922b800 nmethod 1652 0x0000000002b675d0 code [0x0000000002b67700, 0x0000000002b67798]
+Event: 929.765 Thread 0x000000000741d800 1653   !         sun.nio.ch.WindowsSelectorImpl$SubSelector::processFDSet (374 bytes)
+Event: 929.794 Thread 0x000000000741d800 nmethod 1653 0x0000000002b88510 code [0x0000000002b88720, 0x0000000002b89a80]
+Event: 995.758 Thread 0x000000000922b800 1654             com.google.gwt.dev.shell.ModuleSpace::invokeNative (46 bytes)
+Event: 995.767 Thread 0x000000000922b800 nmethod 1654 0x0000000002c29150 code [0x0000000002c292c0, 0x0000000002c29608]
+Event: 998.192 Thread 0x000000000741d800 1655             com.google.gwt.dev.shell.BrowserChannel$Message::readMessageType (59 bytes)
+Event: 998.199 Thread 0x000000000741d800 nmethod 1655 0x00000000029b0dd0 code [0x00000000029b0f60, 0x00000000029b1558]
+
+GC Heap History (10 events):
+Event: 536.943 GC heap before
+{Heap before GC invocations=23 (full 3):
+ PSYoungGen      total 116736K, used 58368K [0x00000000f5500000, 0x0000000100000000, 0x0000000100000000)
+  eden space 58368K, 100% used [0x00000000f5500000,0x00000000f8e00000,0x00000000f8e00000)
+  from space 58368K, 0% used [0x00000000f8e00000,0x00000000f8e00000,0x00000000fc700000)
+  to   space 58368K, 0% used [0x00000000fc700000,0x00000000fc700000,0x0000000100000000)
+ ParOldGen       total 167936K, used 79667K [0x00000000e0000000, 0x00000000ea400000, 0x00000000f5500000)
+  object space 167936K, 47% used [0x00000000e0000000,0x00000000e4dccc80,0x00000000ea400000)
+ PSPermGen       total 45568K, used 29697K [0x00000000dae00000, 0x00000000dda80000, 0x00000000e0000000)
+  object space 45568K, 65% used [0x00000000dae00000,0x00000000dcb007e8,0x00000000dda80000)
+Event: 536.966 GC heap after
+Heap after GC invocations=23 (full 3):
+ PSYoungGen      total 116736K, used 15456K [0x00000000f5500000, 0x0000000100000000, 0x0000000100000000)
+  eden space 58368K, 0% used [0x00000000f5500000,0x00000000f5500000,0x00000000f8e00000)
+  from space 58368K, 26% used [0x00000000fc700000,0x00000000fd618010,0x0000000100000000)
+  to   space 58368K, 0% used [0x00000000f8e00000,0x00000000f8e00000,0x00000000fc700000)
+ ParOldGen       total 167936K, used 79667K [0x00000000e0000000, 0x00000000ea400000, 0x00000000f5500000)
+  object space 167936K, 47% used [0x00000000e0000000,0x00000000e4dccc80,0x00000000ea400000)
+ PSPermGen       total 45568K, used 29697K [0x00000000dae00000, 0x00000000dda80000, 0x00000000e0000000)
+  object space 45568K, 65% used [0x00000000dae00000,0x00000000dcb007e8,0x00000000dda80000)
+}
+Event: 537.739 GC heap before
+{Heap before GC invocations=24 (full 3):
+ PSYoungGen      total 116736K, used 73824K [0x00000000f5500000, 0x0000000100000000, 0x0000000100000000)
+  eden space 58368K, 100% used [0x00000000f5500000,0x00000000f8e00000,0x00000000f8e00000)
+  from space 58368K, 26% used [0x00000000fc700000,0x00000000fd618010,0x0000000100000000)
+  to   space 58368K, 0% used [0x00000000f8e00000,0x00000000f8e00000,0x00000000fc700000)
+ ParOldGen       total 167936K, used 79667K [0x00000000e0000000, 0x00000000ea400000, 0x00000000f5500000)
+  object space 167936K, 47% used [0x00000000e0000000,0x00000000e4dccc80,0x00000000ea400000)
+ PSPermGen       total 45568K, used 29739K [0x00000000dae00000, 0x00000000dda80000, 0x00000000e0000000)
+  object space 45568K, 65% used [0x00000000dae00000,0x00000000dcb0ae18,0x00000000dda80000)
+Event: 537.800 GC heap after
+Heap after GC invocations=24 (full 3):
+ PSYoungGen      total 116736K, used 31192K [0x00000000f5500000, 0x0000000100000000, 0x0000000100000000)
+  eden space 58368K, 0% used [0x00000000f5500000,0x00000000f5500000,0x00000000f8e00000)
+  from space 58368K, 53% used [0x00000000f8e00000,0x00000000fac76218,0x00000000fc700000)
+  to   space 58368K, 0% used [0x00000000fc700000,0x00000000fc700000,0x0000000100000000)
+ ParOldGen       total 167936K, used 79667K [0x00000000e0000000, 0x00000000ea400000, 0x00000000f5500000)
+  object space 167936K, 47% used [0x00000000e0000000,0x00000000e4dccc80,0x00000000ea400000)
+ PSPermGen       total 45568K, used 29739K [0x00000000dae00000, 0x00000000dda80000, 0x00000000e0000000)
+  object space 45568K, 65% used [0x00000000dae00000,0x00000000dcb0ae18,0x00000000dda80000)
+}
+Event: 538.754 GC heap before
+{Heap before GC invocations=25 (full 3):
+ PSYoungGen      total 116736K, used 89560K [0x00000000f5500000, 0x0000000100000000, 0x0000000100000000)
+  eden space 58368K, 100% used [0x00000000f5500000,0x00000000f8e00000,0x00000000f8e00000)
+  from space 58368K, 53% used [0x00000000f8e00000,0x00000000fac76218,0x00000000fc700000)
+  to   space 58368K, 0% used [0x00000000fc700000,0x00000000fc700000,0x0000000100000000)
+ ParOldGen       total 167936K, used 79667K [0x00000000e0000000, 0x00000000ea400000, 0x00000000f5500000)
+  object space 167936K, 47% used [0x00000000e0000000,0x00000000e4dccc80,0x00000000ea400000)
+ PSPermGen       total 45568K, used 31194K [0x00000000dae00000, 0x00000000dda80000, 0x00000000e0000000)
+  object space 45568K, 68% used [0x00000000dae00000,0x00000000dcc769f0,0x00000000dda80000)
+Event: 538.812 GC heap after
+Heap after GC invocations=25 (full 3):
+ PSYoungGen      total 116736K, used 24096K [0x00000000f5500000, 0x0000000100000000, 0x0000000100000000)
+  eden space 58368K, 0% used [0x00000000f5500000,0x00000000f5500000,0x00000000f8e00000)
+  from space 58368K, 41% used [0x00000000fc700000,0x00000000fde88060,0x0000000100000000)
+  to   space 58368K, 0% used [0x00000000f8e00000,0x00000000f8e00000,0x00000000fc700000)
+ ParOldGen       total 167936K, used 95123K [0x00000000e0000000, 0x00000000ea400000, 0x00000000f5500000)
+  object space 167936K, 56% used [0x00000000e0000000,0x00000000e5ce4c90,0x00000000ea400000)
+ PSPermGen       total 45568K, used 31194K [0x00000000dae00000, 0x00000000dda80000, 0x00000000e0000000)
+  object space 45568K, 68% used [0x00000000dae00000,0x00000000dcc769f0,0x00000000dda80000)
+}
+Event: 540.796 GC heap before
+{Heap before GC invocations=26 (full 3):
+ PSYoungGen      total 116736K, used 82464K [0x00000000f5500000, 0x0000000100000000, 0x0000000100000000)
+  eden space 58368K, 100% used [0x00000000f5500000,0x00000000f8e00000,0x00000000f8e00000)
+  from space 58368K, 41% used [0x00000000fc700000,0x00000000fde88060,0x0000000100000000)
+  to   space 58368K, 0% used [0x00000000f8e00000,0x00000000f8e00000,0x00000000fc700000)
+ ParOldGen       total 167936K, used 95123K [0x00000000e0000000, 0x00000000ea400000, 0x00000000f5500000)
+  object space 167936K, 56% used [0x00000000e0000000,0x00000000e5ce4c90,0x00000000ea400000)
+ PSPermGen       total 45568K, used 32581K [0x00000000dae00000, 0x00000000dda80000, 0x00000000e0000000)
+  object space 45568K, 71% used [0x00000000dae00000,0x00000000dcdd14a0,0x00000000dda80000)
+Event: 540.853 GC heap after
+Heap after GC invocations=26 (full 3):
+ PSYoungGen      total 116736K, used 2051K [0x00000000f5500000, 0x0000000100000000, 0x0000000100000000)
+  eden space 58368K, 0% used [0x00000000f5500000,0x00000000f5500000,0x00000000f8e00000)
+  from space 58368K, 3% used [0x00000000f8e00000,0x00000000f9000cc0,0x00000000fc700000)
+  to   space 58368K, 0% used [0x00000000fc700000,0x00000000fc700000,0x0000000100000000)
+ ParOldGen       total 167936K, used 118996K [0x00000000e0000000, 0x00000000ea400000, 0x00000000f5500000)
+  object space 167936K, 70% used [0x00000000e0000000,0x00000000e74352a0,0x00000000ea400000)
+ PSPermGen       total 45568K, used 32581K [0x00000000dae00000, 0x00000000dda80000, 0x00000000e0000000)
+  object space 45568K, 71% used [0x00000000dae00000,0x00000000dcdd14a0,0x00000000dda80000)
+}
+Event: 548.146 GC heap before
+{Heap before GC invocations=27 (full 3):
+ PSYoungGen      total 116736K, used 60419K [0x00000000f5500000, 0x0000000100000000, 0x0000000100000000)
+  eden space 58368K, 100% used [0x00000000f5500000,0x00000000f8e00000,0x00000000f8e00000)
+  from space 58368K, 3% used [0x00000000f8e00000,0x00000000f9000cc0,0x00000000fc700000)
+  to   space 58368K, 0% used [0x00000000fc700000,0x00000000fc700000,0x0000000100000000)
+ ParOldGen       total 167936K, used 118996K [0x00000000e0000000, 0x00000000ea400000, 0x00000000f5500000)
+  object space 167936K, 70% used [0x00000000e0000000,0x00000000e74352a0,0x00000000ea400000)
+ PSPermGen       total 45568K, used 33814K [0x00000000dae00000, 0x00000000dda80000, 0x00000000e0000000)
+  object space 45568K, 74% used [0x00000000dae00000,0x00000000dcf05860,0x00000000dda80000)
+Event: 548.155 GC heap after
+Heap after GC invocations=27 (full 3):
+ PSYoungGen      total 116736K, used 2498K [0x00000000f5500000, 0x0000000100000000, 0x0000000100000000)
+  eden space 58368K, 0% used [0x00000000f5500000,0x00000000f5500000,0x00000000f8e00000)
+  from space 58368K, 4% used [0x00000000fc700000,0x00000000fc970930,0x0000000100000000)
+  to   space 58368K, 0% used [0x00000000f8e00000,0x00000000f8e00000,0x00000000fc700000)
+ ParOldGen       total 167936K, used 120422K [0x00000000e0000000, 0x00000000ea400000, 0x00000000f5500000)
+  object space 167936K, 71% used [0x00000000e0000000,0x00000000e7599a28,0x00000000ea400000)
+ PSPermGen       total 45568K, used 33814K [0x00000000dae00000, 0x00000000dda80000, 0x00000000e0000000)
+  object space 45568K, 74% used [0x00000000dae00000,0x00000000dcf05860,0x00000000dda80000)
+}
+
+Deoptimization events (10 events):
+Event: 542.231 Thread 0x00000000095aa000 Uncommon trap: reason=range_check action=none pc=0x0000000002aac128 method=org.eclipse.jdt.internal.compiler.parser.Scanner.getNextToken()I @ 93
+Event: 542.233 Thread 0x00000000095aa000 Uncommon trap: reason=range_check action=none pc=0x0000000002aac128 method=org.eclipse.jdt.internal.compiler.parser.Scanner.getNextToken()I @ 93
+Event: 542.561 Thread 0x00000000095aa000 Uncommon trap: reason=range_check action=none pc=0x0000000002aac128 method=org.eclipse.jdt.internal.compiler.parser.Scanner.getNextToken()I @ 93
+Event: 542.590 Thread 0x00000000095aa000 Uncommon trap: reason=range_check action=none pc=0x0000000002aac128 method=org.eclipse.jdt.internal.compiler.parser.Scanner.getNextToken()I @ 93
+Event: 542.632 Thread 0x00000000095aa000 Uncommon trap: reason=range_check action=none pc=0x0000000002aac128 method=org.eclipse.jdt.internal.compiler.parser.Scanner.getNextToken()I @ 93
+Event: 542.673 Thread 0x00000000095aa000 Uncommon trap: reason=range_check action=none pc=0x0000000002aac128 method=org.eclipse.jdt.internal.compiler.parser.Scanner.getNextToken()I @ 93
+Event: 542.718 Thread 0x00000000095aa000 Uncommon trap: reason=range_check action=none pc=0x0000000002aac128 method=org.eclipse.jdt.internal.compiler.parser.Scanner.getNextToken()I @ 93
+Event: 543.977 Thread 0x00000000095aa000 Uncommon trap: reason=range_check action=none pc=0x0000000002aac128 method=org.eclipse.jdt.internal.compiler.parser.Scanner.getNextToken()I @ 93
+Event: 888.467 Thread 0x00000000095aa000 Uncommon trap: reason=unhandled action=none pc=0x0000000002a87aac method=com.google.gwt.dev.shell.BrowserChannelServer.invokeJavascript(Lcom/google/gwt/dev/shell/CompilingClassLoader;Lcom/google/gwt/dev/shell/JsValueOOPHM;Ljava/lang/String;[Lcom/google/gwttH„¼Ã‹@
+Event: 888.467 Thread 0x00000000095aa000 Uncommon trap: reason=unreached action=reinterpret pc=0x00000000027edf84 method=com.google.gwt.dev.util.log.AbstractTreeLogger.causedBySpecialError(Ljava/lang/Throwable;)Ljava/lang/String; @ 1
+
+Internal exceptions (10 events):
+Event: 542.231 Thread 0x00000000095aa000 Threw 0x00000000f73ce3b8 at C:\re\jdk7u55\869\hotspot\src\share\vm\interpreter\interpreterRuntime.cpp:347
+Event: 542.232 Thread 0x00000000095aa000 Threw 0x00000000f73d6398 at C:\re\jdk7u55\869\hotspot\src\share\vm\interpreter\interpreterRuntime.cpp:347
+Event: 542.233 Thread 0x00000000095aa000 Threw 0x00000000f73de588 at C:\re\jdk7u55\869\hotspot\src\share\vm\interpreter\interpreterRuntime.cpp:347
+Event: 542.562 Thread 0x00000000095aa000 Threw 0x00000000f7b79978 at C:\re\jdk7u55\869\hotspot\src\share\vm\interpreter\interpreterRuntime.cpp:347
+Event: 542.590 Thread 0x00000000095aa000 Threw 0x00000000f7c702a8 at C:\re\jdk7u55\869\hotspot\src\share\vm\interpreter\interpreterRuntime.cpp:347
+Event: 542.632 Thread 0x00000000095aa000 Threw 0x00000000f7cfc980 at C:\re\jdk7u55\869\hotspot\src\share\vm\interpreter\interpreterRuntime.cpp:347
+Event: 542.673 Thread 0x00000000095aa000 Threw 0x00000000f7e1aea0 at C:\re\jdk7u55\869\hotspot\src\share\vm\interpreter\interpreterRuntime.cpp:347
+Event: 542.718 Thread 0x00000000095aa000 Threw 0x00000000f7fc0198 at C:\re\jdk7u55\869\hotspot\src\share\vm\interpreter\interpreterRuntime.cpp:347
+Event: 543.977 Thread 0x00000000095aa000 Threw 0x00000000f85b3d30 at C:\re\jdk7u55\869\hotspot\src\share\vm\interpreter\interpreterRuntime.cpp:347
+Event: 888.459 Thread 0x00000000095aa000 Threw 0x00000000f72839d0 at C:\re\jdk7u55\869\hotspot\src\share\vm\classfile\systemDictionary.cpp:174
+
+Events (10 events):
+Event: 888.460 loading class 0x000000000d897c30
+Event: 888.460 loading class 0x000000000d897c30 done
+Event: 888.467 Thread 0x00000000095aa000 Uncommon trap: trap_request=0xffffffa7 fr.pc=0x0000000002a87aac
+Event: 888.467 Thread 0x00000000095aa000 DEOPT PACKING pc=0x0000000002a87aac sp=0x000000000c91e6e0
+Event: 888.467 Thread 0x00000000095aa000 DEOPT UNPACKING pc=0x0000000002699064 sp=0x000000000c91e6b0 mode 2
+Event: 888.467 Thread 0x00000000095aa000 Uncommon trap: trap_request=0xffffffad fr.pc=0x00000000027edf84
+Event: 888.467 Thread 0x00000000095aa000 DEOPT PACKING pc=0x00000000027edf84 sp=0x000000000c91e660
+Event: 888.467 Thread 0x00000000095aa000 DEOPT UNPACKING pc=0x0000000002699064 sp=0x000000000c91e608 mode 2
+Event: 989.894 Executing VM operation: RedefineClasses
+Event: 990.177 Executing VM operation: RedefineClasses done
+
+
+Dynamic libraries:
+0x000000013f330000 - 0x000000013f363000 	C:\Program Files\Java\jre7\bin\javaw.exe
+0x0000000077bd0000 - 0x0000000077d7b000 	C:\Windows\SYSTEM32\ntdll.dll
+0x0000000077ab0000 - 0x0000000077bcf000 	C:\Windows\system32\kernel32.dll
+0x000007fefdc40000 - 0x000007fefdcab000 	C:\Windows\system32\KERNELBASE.dll
+0x000007fefe2c0000 - 0x000007fefe39b000 	C:\Windows\system32\ADVAPI32.dll
+0x000007feff9b0000 - 0x000007feffa4f000 	C:\Windows\system32\msvcrt.dll
+0x000007fefdf20000 - 0x000007fefdf3f000 	C:\Windows\SYSTEM32\sechost.dll
+0x000007fefe3a0000 - 0x000007fefe4ce000 	C:\Windows\system32\RPCRT4.dll
+0x00000000779b0000 - 0x0000000077aaa000 	C:\Windows\system32\USER32.dll
+0x000007fefdf40000 - 0x000007fefdfa7000 	C:\Windows\system32\GDI32.dll
+0x000007feffa60000 - 0x000007feffa6e000 	C:\Windows\system32\LPK.dll
+0x000007fefdfe0000 - 0x000007fefe0aa000 	C:\Windows\system32\USP10.dll
+0x000007fefbf20000 - 0x000007fefc114000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7600.16385_none_fa645303170382f6\COMCTL32.dll
+0x000007fefe650000 - 0x000007fefe6c1000 	C:\Windows\system32\SHLWAPI.dll
+0x000007fefdfb0000 - 0x000007fefdfde000 	C:\Windows\system32\IMM32.DLL
+0x000007feffa70000 - 0x000007feffb79000 	C:\Windows\system32\MSCTF.dll
+0x0000000070ef0000 - 0x0000000070fc2000 	C:\Program Files\Java\jre7\bin\msvcr100.dll
+0x000000006d890000 - 0x000000006e059000 	C:\Program Files\Java\jre7\bin\server\jvm.dll
+0x000007fefbed0000 - 0x000007fefbed9000 	C:\Windows\system32\WSOCK32.dll
+0x000007feffb80000 - 0x000007feffbcd000 	C:\Windows\system32\WS2_32.dll
+0x000007feffa50000 - 0x000007feffa58000 	C:\Windows\system32\NSI.dll
+0x000007fefb9d0000 - 0x000007fefba0b000 	C:\Windows\system32\WINMM.dll
+0x0000000077da0000 - 0x0000000077da7000 	C:\Windows\system32\PSAPI.DLL
+0x0000000073f20000 - 0x0000000073f2f000 	C:\Program Files\Java\jre7\bin\verify.dll
+0x0000000073e00000 - 0x0000000073e28000 	C:\Program Files\Java\jre7\bin\java.dll
+0x0000000070ae0000 - 0x0000000070b15000 	C:\Program Files\Java\jre7\bin\jdwp.dll
+0x0000000074200000 - 0x0000000074208000 	C:\Program Files\Java\jre7\bin\npt.dll
+0x0000000073d30000 - 0x0000000073d45000 	C:\Program Files\Java\jre7\bin\zip.dll
+0x00000000741f0000 - 0x00000000741f9000 	C:\Program Files\Java\jre7\bin\dt_socket.dll
+0x000007fefc9d0000 - 0x000007fefc9e5000 	C:\Windows\system32\NLAapi.dll
+0x000007fefd3a0000 - 0x000007fefd3f4000 	C:\Windows\System32\mswsock.dll
+0x000007fefd220000 - 0x000007fefd27b000 	C:\Windows\system32\DNSAPI.dll
+0x000007fef85f0000 - 0x000007fef85fb000 	C:\Windows\System32\winrnr.dll
+0x000007fef85d0000 - 0x000007fef85e5000 	C:\Windows\system32\napinsp.dll
+0x000007fef85b0000 - 0x000007fef85c9000 	C:\Windows\system32\pnrpnsp.dll
+0x000007fefb8e0000 - 0x000007fefb907000 	C:\Windows\system32\IPHLPAPI.DLL
+0x000007fefb8d0000 - 0x000007fefb8db000 	C:\Windows\system32\WINNSI.DLL
+0x000007fefb730000 - 0x000007fefb783000 	C:\Windows\System32\fwpuclnt.dll
+0x000007fef9380000 - 0x000007fef9388000 	C:\Windows\system32\rasadhlp.dll
+0x000007fefcd70000 - 0x000007fefcd77000 	C:\Windows\System32\wshtcpip.dll
+0x00000000723b0000 - 0x00000000723c9000 	C:\Program Files\Java\jre7\bin\net.dll
+0x000007fefd390000 - 0x000007fefd397000 	C:\Windows\System32\wship6.dll
+0x0000000071a50000 - 0x0000000071a61000 	C:\Program Files\Java\jre7\bin\nio.dll
+0x000007fefd400000 - 0x000007fefd417000 	C:\Windows\system32\CRYPTSP.dll
+0x000007fefd100000 - 0x000007fefd147000 	C:\Windows\system32\rsaenh.dll
+0x000007fefce80000 - 0x000007fefce9e000 	C:\Windows\system32\USERENV.dll
+0x000007fefdb30000 - 0x000007fefdb3f000 	C:\Windows\system32\profapi.dll
+0x000007fefda60000 - 0x000007fefda6f000 	C:\Windows\system32\CRYPTBASE.dll
+0x000007fefb480000 - 0x000007fefb498000 	C:\Windows\system32\dhcpcsvc.DLL
+0x000007fefb460000 - 0x000007fefb471000 	C:\Windows\system32\dhcpcsvc6.DLL
+0x000000006ef20000 - 0x000000006f0b5000 	C:\Program Files\Java\jre7\bin\awt.dll
+0x000007fefe810000 - 0x000007fefe8e7000 	C:\Windows\system32\OLEAUT32.dll
+0x000007fefe0b0000 - 0x000007fefe2b1000 	C:\Windows\system32\ole32.dll
+0x0000000071920000 - 0x0000000071944000 	C:\Program Files\Java\jre7\bin\sunec.dll
+0x0000000074890000 - 0x000000007489b000 	C:\Program Files\Java\jre7\bin\sunmscapi.dll
+0x000007fefdcf0000 - 0x000007fefde56000 	C:\Windows\system32\CRYPT32.dll
+0x000007fefdbd0000 - 0x000007fefdbdf000 	C:\Windows\system32\MSASN1.dll
+0x000007fefb970000 - 0x000007fefb988000 	C:\Windows\system32\DWMAPI.DLL
+
+VM Arguments:
+jvm_args: -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:57790 -Xmx512m -Dfile.encoding=Cp1252 
+java_command: com.google.gwt.dev.DevMode -remoteUI 49932:90433776961628 -startupUrl Gwt.html -logLevel INFO -codeServerPort 9997 -port 8888 -war C:\Users\Armando\workspace\Gwt\war com.gwt.Gwt
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Java\jdk1.7.0_55
+PATH=C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\nodejs\;C:\Program Files (x86)\Git\cmd;C:\Program Files\apache-maven-3.2.1\bin;C:\Program Files\Java\jdk1.7.0_55;C:\Users\Armando\AppData\Roaming\npm
+USERNAME=Armando
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 37 Stepping 5, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 7 , 64 bit Build 7600 
+
+CPU:total 4 (2 cores per cpu, 2 threads per core) family 6 model 37 stepping 5, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, ht, tsc, tscinvbit
+
+Memory: 4k page, physical 3848292k(967924k free), swap 7694688k(3902188k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (24.55-b03) for windows-amd64 JRE (1.7.0_55-b13), built on Mar 17 2014 19:45:30 by "java_re" with unknown MS VC++:1600
+
+time: Fri Jul 25 11:40:40 2014
+elapsed time: 998 seconds
+

@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -60,6 +61,10 @@ import com.sencha.gxt.widget.core.client.container.VBoxLayoutContainer.VBoxLayou
 public class Gwt implements IsWidget, EntryPoint {
 	
 	
+	
+	private FlexTable stocksFlexTable; 
+	
+	
 	private static final String JSON_URL = GWT.getModuleBaseURL() + "sermones";
 	
 	
@@ -99,7 +104,7 @@ public class Gwt implements IsWidget, EntryPoint {
 	      lccenter = new ContentPanel();
 	      lccenter.setHeaderVisible(false);
 	      lccenter.add(new HTML(
-	          "<p style=\"padding:10px;color:#556677;font-size:11px;\">Select a configuration on the left</p>"));
+	          "<p style=\"padding:10px;color:#556677;font-size:11px;\">Bienvenido seleccione su opcion</p>"));
 	 
 	      MarginData center = new MarginData(new Margins(5));
 	 
@@ -112,24 +117,97 @@ public class Gwt implements IsWidget, EntryPoint {
 	        @Override
 	        public void onValueChange(ValueChangeEvent<Boolean> event) {
 	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.TOP);
+	        	  HBoxLayoutContainer c = new HBoxLayoutContainer();
+		            c.setPadding(new Padding(5));
+		            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
+		            c.setPack(BoxLayoutPack.CENTER);		            		            		            
 	 	        
-	            c.add(new TextButton(button1Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            BoxLayoutData flex = new BoxLayoutData(new Margins(0, 5, 0, 0));
-	            flex.setFlex(1);
-	            c.add(new Label(), flex);
-	            c.add(new TextButton(button2Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button3Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button4Text), new BoxLayoutData(new Margins(0)));
-	 
+		            stocksFlexTable= new FlexTable();
+		            BoxLayoutData layoutData = new BoxLayoutData(new Margins(0, 5, 0, 0));
+		            stocksFlexTable.setText(0, 0, "ID");
+		            stocksFlexTable.setText(0, 1, "Nombre Mensaje");
+		            stocksFlexTable.setText(0, 2, "Predicador");	
+		            stocksFlexTable.setText(0, 3, "Reproducir");	
+		            stocksFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
+		            stocksFlexTable.addStyleName("watchList");
+		            stocksFlexTable.getCellFormatter().addStyleName(0, 1, "watchListNumericColumn");
+		            stocksFlexTable.getCellFormatter().addStyleName(0, 2, "watchListNumericColumn"); 
+		            
+		            stocksFlexTable.setCellPadding(6);
+		            
+		            
+		            // llamada para recuperar los sermones
+		            		      
+		    		String url = URL.encode(JSON_URL);		
+		    		 RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+
+		    		    try {
+		    		    	Request request = builder.sendRequest(null, new RequestCallback() {
+		    		        @Override
+		    				public void onError(Request request, Throwable exception) {
+		    		         // displayError("Couldn't retrieve JSON");		    		        	
+		    		        }
+
+		    		        @Override
+		    				public void onResponseReceived(Request request, Response response) {
+		    		          if (200 == response.getStatusCode()) {
+		    		        	  JsArray<SermonData> sermones= JsonUtils.safeEval(response.getText());
+		    		        	  
+		    		        	 
+		    		        	  int row = stocksFlexTable.getRowCount();		    		 		 
+		    		  		    
+		    		        	  for (int i = 0; i < sermones.length(); i++) {		    		        		 
+		    				    	    stocksFlexTable.setText(row, 0, String.valueOf(sermones.get(i).getId()));
+		    				    	    stocksFlexTable.setText(row, 1, sermones.get(i).getName());
+		    				    	    stocksFlexTable.setText(row, 2, sermones.get(i).getName_of_predicador());		    				    	   		    				    	   
+		    				    	    Button playButton = new Button("Play");		
+		    				    	    playButton.addStyleDependentName("remove");
+		    				    	    stocksFlexTable.setWidget(row, 3, playButton);
+		    				    	    row++;
+		    		        	    }
+		    		        	  
+		    		          } else {
+		    		            //displayError("Couldn't retrieve JSON (" + response.getStatusText()+ ")");		    		        	  
+		    		          }
+		    		        }
+		    		      });
+		    		    } catch (RequestException e) {
+		    		      //displayError("Couldn't retrieve JSON");		    		 
+		    		    }
+		     	            	         	        
+	            c.add(stocksFlexTable,layoutData);
+	            
 	            addToCenter(c);
 	          }
 	        }
 	      }), vBoxData);
 	 
-	      lcwest.add(createToggleButton("Multi-Spaced", new ValueChangeHandler<Boolean>() {
+	      lcwest.add(createToggleButton("Subir Sermones", new ValueChangeHandler<Boolean>() {
+	        @Override
+	        public void onValueChange(ValueChangeEvent<Boolean> event) {
+	          if (event.getValue()) {
+	            HBoxLayoutContainer c = new HBoxLayoutContainer();
+	            c.setPadding(new Padding(5));
+	            c.setHBoxLayoutAlign(HBoxLayoutAlign.TOP);
+	 
+	            /*c.add(new TextButton(button1Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
+	            BoxLayoutData flex = new BoxLayoutData(new Margins(0, 5, 0, 0));
+	            flex.setFlex(1);
+	            c.add(new Label(), flex);
+	            c.add(new TextButton(button2Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
+	            c.add(new Label(), flex);
+	            c.add(new TextButton(button3Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
+	            c.add(new Label(), flex);
+	            c.add(new TextButton(button4Text), new BoxLayoutData(new Margins(0)));*/
+	            
+	            UploadSermonForm a= new UploadSermonForm();	         
+	            c.add(a.asWidget());            
+	            addToCenter(c);
+	          }
+	        }
+	      }), vBoxData);
+	 
+	      lcwest.add(createToggleButton("Ver Himnos", new ValueChangeHandler<Boolean>() {
 	        @Override
 	        public void onValueChange(ValueChangeEvent<Boolean> event) {
 	          if (event.getValue()) {
@@ -138,29 +216,6 @@ public class Gwt implements IsWidget, EntryPoint {
 	            c.setHBoxLayoutAlign(HBoxLayoutAlign.TOP);
 	 
 	            c.add(new TextButton(button1Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            BoxLayoutData flex = new BoxLayoutData(new Margins(0, 5, 0, 0));
-	            flex.setFlex(1);
-	            c.add(new Label(), flex);
-	            c.add(new TextButton(button2Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new Label(), flex);
-	            c.add(new TextButton(button3Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new Label(), flex);
-	            c.add(new TextButton(button4Text), new BoxLayoutData(new Margins(0)));
-	 
-	            addToCenter(c);
-	          }
-	        }
-	      }), vBoxData);
-	 
-	      lcwest.add(createToggleButton("Align: top", new ValueChangeHandler<Boolean>() {
-	        @Override
-	        public void onValueChange(ValueChangeEvent<Boolean> event) {
-	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.TOP);
-	 
-	            c.add(new TextButton(button1Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
 	            c.add(new TextButton(button2Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
 	            c.add(new TextButton(button3Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
 	            c.add(new TextButton(button4Text), new BoxLayoutData(new Margins(0)));
@@ -170,7 +225,7 @@ public class Gwt implements IsWidget, EntryPoint {
 	        }
 	      }), vBoxData);
 	 
-	      lcwest.add(createToggleButton("Align: middle", new ValueChangeHandler<Boolean>() {
+	      lcwest.add(createToggleButton("Subir Himnos", new ValueChangeHandler<Boolean>() {
 	        @Override
 	        public void onValueChange(ValueChangeEvent<Boolean> event) {
 	          if (event.getValue()) {
@@ -188,7 +243,7 @@ public class Gwt implements IsWidget, EntryPoint {
 	        }
 	      }), vBoxData);
 	 
-	      lcwest.add(createToggleButton("Align: bottom", new ValueChangeHandler<Boolean>() {
+	      lcwest.add(createToggleButton("Programa", new ValueChangeHandler<Boolean>() {
 	        @Override
 	        public void onValueChange(ValueChangeEvent<Boolean> event) {
 	          if (event.getValue()) {

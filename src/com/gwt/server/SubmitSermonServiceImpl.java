@@ -1,0 +1,78 @@
+package com.gwt.server;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.gwt.client.SubmitSermonService;
+
+public class SubmitSermonServiceImpl extends RemoteServiceServlet implements SubmitSermonService{
+	
+	private static final String url = "http://10.0.0.15:8080/com.ServerPrincipal/api/v1";
+	
+	@Override
+	public String SubmitService(String name, String name_of_predicador,
+			String serie, String Descripcion) throws IllegalArgumentException {	
+			
+		HttpClient httpclient = new DefaultHttpClient();
+		String complementoURL = url+"/addSermon/"+name.replaceAll(" ", "%20")+"/"+name_of_predicador.replaceAll(" ", "%20")+"/"+serie.replaceAll(" ", "%20")+"/"+Descripcion.replaceAll(" ", "%20");
+		JSONArray jsonArray = null;
+		HttpGet httppost = new HttpGet(complementoURL);
+		try 
+		{
+			HttpResponse response = httpclient.execute(httppost);
+			String jsonResult = inputStreamToString(
+					response.getEntity().getContent()).toString();
+
+			jsonArray = new JSONArray(jsonResult);		
+		} 
+		catch (ClientProtocolException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (JSONException e) 
+		{
+			e.printStackTrace();
+		}
+		if(jsonArray.length()!=0)
+			return "Sermon guardado con exito!";
+		else
+			return "Error! al guardar el sermon";
+	}
+	private StringBuilder inputStreamToString(InputStream is) {
+		String rLine = "";
+		StringBuilder answer = new StringBuilder();
+
+		InputStreamReader isr = new InputStreamReader(is);
+
+		BufferedReader rd = new BufferedReader(isr);
+
+		try 
+		{
+			while ((rLine = rd.readLine()) != null) 
+			{
+				answer.append(rLine);
+			}
+		}
+
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		return answer;
+	}
+}
