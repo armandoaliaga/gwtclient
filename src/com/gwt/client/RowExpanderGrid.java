@@ -60,7 +60,7 @@ public class RowExpanderGrid implements IsWidget {
 	        }
 	      });
 	 
-	      ColumnConfig<Sermon, Date> lastTransCol = new ColumnConfig<Sermon, Date>(props.date(), 120, "Fecha");
+	      ColumnConfig<Sermon, Date> lastTransCol = new ColumnConfig<Sermon, Date>(props.date(), 121, "Fecha");
 	      lastTransCol.setCell(new DateCell(DateTimeFormat.getFormat("MM/dd/yyyy")));
 	 
 	      List<ColumnConfig<Sermon, ?>> l = new ArrayList<ColumnConfig<Sermon, ?>>();
@@ -78,7 +78,7 @@ public class RowExpanderGrid implements IsWidget {
 	      panel = new ContentPanel();
 	      panel.setHeadingText("Sermones");
 	      //panel.getHeader().setIcon(ExampleImages.INSTANCE.table());
-	      panel.setPixelSize(1030, 565);
+	      panel.setPixelSize(1141, 598);
 	      panel.addStyleName("margin-10");
 	 
 	      final Grid<Sermon> grid = new Grid<Sermon>(store, cm);

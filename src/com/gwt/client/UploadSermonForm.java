@@ -2,40 +2,33 @@ package com.gwt.client;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.util.ToggleGroup;
 import com.sencha.gxt.widget.core.client.FramedPanel;
-import com.sencha.gxt.widget.core.client.TabPanel;
+import com.sencha.gxt.widget.core.client.box.AutoProgressMessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.AbstractHtmlLayoutContainer.HtmlData;
 import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.MarginData;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 import com.sencha.gxt.widget.core.client.form.DateField;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.FileUploadField;
-import com.sencha.gxt.widget.core.client.form.FormPanel;
 import com.sencha.gxt.widget.core.client.form.FormPanel.LabelAlign;
 import com.sencha.gxt.widget.core.client.form.FormPanelHelper;
 import com.sencha.gxt.widget.core.client.form.HtmlEditor;
-import com.sencha.gxt.widget.core.client.form.Radio;
 import com.sencha.gxt.widget.core.client.form.TextField;
+import com.sencha.gxt.widget.core.client.info.Info;
 
 public class UploadSermonForm implements IsWidget {
 	 
       final SubmitSermonServiceAsync submitservice= GWT.create(SubmitSermonService.class);
-	  private static final int COLUMN_FORM_WIDTH = 1000;
+	  private static final int COLUMN_FORM_WIDTH = 1100;
 	  private VerticalPanel vp;
 	 
 	  public Widget asWidget() {
@@ -102,19 +95,31 @@ public class UploadSermonForm implements IsWidget {
 	    panel.addButton(new TextButton("Submit",new SelectHandler() {
 			
 			@Override
-			public void onSelect(SelectEvent event) {				
-				Window.alert("Button Submit");				
+			public void onSelect(SelectEvent event) {									
+			  final AutoProgressMessageBox box = new AutoProgressMessageBox("En progreso", "Guardando sermon, por favor espere...");
+  	          box.setProgressText("Guardando...");
+  	          box.auto();		    	         
+  	          box.show();
 				submitservice.SubmitService(Name.getText(), Name_of_predicador.getText(), serie.getText(), a.getValue(), new AsyncCallback<String>() {
 					
 					@Override
 					public void onSuccess(String result) {
-						Window.alert(result);
+						 
+		    	 
+		    	          Timer t = new Timer() {
+		    	            @Override
+		    	            public void run() {		    	            	
+		    	              Info.display("Mensaje", "Sermon guardado con exito!");
+		    	              box.hide();
+		    	            }
+		    	          };
+		    	          t.schedule(3000);
 					}
 					
 					@Override
 					public void onFailure(Throwable caught) {
-						Window.alert("Que caca!!");
-						
+						 Info.display("Mensaje", "Error al guardar el sermon!");
+						 box.hide();
 					}
 				});		
 			}

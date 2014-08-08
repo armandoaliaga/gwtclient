@@ -1,5 +1,6 @@
 package com.gwt.client;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -21,6 +22,7 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.core.java.util.Collections;
@@ -37,6 +39,7 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.http.client.URL;
+import com.sencha.gxt.widget.core.client.box.AutoProgressMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -44,6 +47,7 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
 
 
 
+import com.sencha.gxt.widget.core.client.info.Info;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -53,6 +57,8 @@ import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.core.client.util.Padding;
 import com.sencha.gxt.core.client.util.ToggleGroup;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.button.ToggleButton;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderLayoutData;
@@ -98,7 +104,7 @@ public class Gwt implements IsWidget, EntryPoint {
 	 
 	      ContentPanel panel = new ContentPanel();
 	      panel.setHeadingText("Help Church Menu");
-	      panel.setPixelSize(1200, 600);
+	      panel.setPixelSize(1365, 633);
 	 
 	      BorderLayoutContainer border = new BorderLayoutContainer();
 	      panel.setWidget(border);
@@ -108,7 +114,7 @@ public class Gwt implements IsWidget, EntryPoint {
 	      lcwest.setPadding(new Padding(5));
 	      lcwest.setVBoxLayoutAlign(VBoxLayoutAlign.STRETCH);
 	 
-	      BorderLayoutData west = new BorderLayoutData(150);
+	      BorderLayoutData west = new BorderLayoutData(200);
 	      west.setMargins(new Margins(5));
 	 
 	      border.setWestWidget(lcwest, west);
@@ -165,7 +171,20 @@ public class Gwt implements IsWidget, EntryPoint {
 		    		      });
 		    		    } catch (RequestException e) {
 		    		      //displayError("Couldn't retrieve JSON");		    		 
-		    		    }		     	            		    		   		    		   		            	            
+		    		    }		
+		    		    
+		    		    final AutoProgressMessageBox box = new AutoProgressMessageBox("En progreso", "Recuperando sermones, aguarde por favor...");
+		    	          box.setProgressText("Cargando...");
+		    	          box.auto();
+		    	          box.show();
+		    	         Timer t = new Timer() {
+			    	            @Override
+			    	            public void run() {		    	            	
+			    	              Info.display("Mensaje", "Sermones cargados con exito!");
+			    	              box.hide();
+			    	            }
+			    	          };
+			    	          t.schedule(3000);   
 	            addToCenter(c);
 	          }
 	        }
@@ -175,6 +194,18 @@ public class Gwt implements IsWidget, EntryPoint {
 	        @Override
 	        public void onValueChange(ValueChangeEvent<Boolean> event) {
 	          if (event.getValue()) {
+
+		            final AutoProgressMessageBox box = new AutoProgressMessageBox("En progreso", "cargando, aguarde por favor...");
+		  	          box.setProgressText("Cargando...");
+		  	          box.auto();
+		  	          box.show();
+		  	         Timer t = new Timer() {
+		    	            @Override
+		    	            public void run() {		    	            		    	              
+		    	              box.hide();
+		    	            }
+		    	          };
+		    	          t.schedule(3000);
 	            HBoxLayoutContainer c = new HBoxLayoutContainer();
 	            c.setPadding(new Padding(5));
 	            c.setHBoxLayoutAlign(HBoxLayoutAlign.TOP);
@@ -190,7 +221,8 @@ public class Gwt implements IsWidget, EntryPoint {
 	            c.add(new TextButton(button4Text), new BoxLayoutData(new Margins(0)));*/
 	            
 	            UploadSermonForm a= new UploadSermonForm();	         
-	            c.add(a.asWidget());            
+	            c.add(a.asWidget()); 
+	              
 	            addToCenter(c);
 	          }
 	        }
@@ -226,7 +258,17 @@ public class Gwt implements IsWidget, EntryPoint {
 	            c.add(new TextButton(button2Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
 	            c.add(new TextButton(button3Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
 	            c.add(new TextButton(button4Text), new BoxLayoutData(new Margins(0)));
-	 
+	           
+	            final Dialog simple = new Dialog();
+	            simple.setHeadingText("Dialog Test");
+	            simple.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.NO);
+	            simple.setBodyStyleName("pad-text");
+	            simple.add(new Label("un poco de texto jaja"));
+	            simple.getBody().addClassName("pad-text");
+	            simple.setHideOnButtonClick(true);
+	            simple.setWidth(300);
+	            simple.add(new Button("asdsa"));
+	            simple.show();
 	            addToCenter(c);
 	          }
 	        }
