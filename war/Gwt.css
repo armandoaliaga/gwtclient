@@ -63,3 +63,8 @@ h1 {
   width: 50px;
 }
 
+.mybtn ToggleButton {
+  font-weight: bold;
+  font-size: 150%;
+}
+

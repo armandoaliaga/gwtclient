@@ -1,5 +1,9 @@
 package com.gwt.client;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+
 import com.gwt.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -15,7 +19,11 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.core.java.util.Collections;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -40,6 +48,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.cell.core.client.ButtonCell.IconAlign;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.core.client.util.Padding;
 import com.sencha.gxt.core.client.util.ToggleGroup;
@@ -54,6 +63,7 @@ import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer.HBoxLayou
 import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VBoxLayoutContainer.VBoxLayoutAlign;
+import com.sun.java.swing.plaf.windows.resources.windows;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -62,7 +72,7 @@ public class Gwt implements IsWidget, EntryPoint {
 	
 	
 	
-	private FlexTable stocksFlexTable; 
+	private ArrayList<Sermon> sermonesgrid=null;
 	
 	
 	private static final String JSON_URL = GWT.getModuleBaseURL() + "sermones";
@@ -77,10 +87,12 @@ public class Gwt implements IsWidget, EntryPoint {
 	  private ContentPanel lccenter;
 	  private ToggleGroup toggleGroup = new ToggleGroup();
 	  private ScrollPanel con;
+	  private int cont=1;
 	 
 	  @Override
 	  public Widget asWidget() {
 	    if (con == null) {
+	    cont=1;
 	      con = new ScrollPanel();
 	      con.setLayoutData(new MarginData(10));
 	 
@@ -117,25 +129,12 @@ public class Gwt implements IsWidget, EntryPoint {
 	        @Override
 	        public void onValueChange(ValueChangeEvent<Boolean> event) {
 	          if (event.getValue()) {
-	        	  HBoxLayoutContainer c = new HBoxLayoutContainer();
+	        	  final HBoxLayoutContainer c = new HBoxLayoutContainer();
 		            c.setPadding(new Padding(5));
 		            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
 		            c.setPack(BoxLayoutPack.CENTER);		            		            		            
-	 	        
-		            stocksFlexTable= new FlexTable();
-		            BoxLayoutData layoutData = new BoxLayoutData(new Margins(0, 5, 0, 0));
-		            stocksFlexTable.setText(0, 0, "ID");
-		            stocksFlexTable.setText(0, 1, "Nombre Mensaje");
-		            stocksFlexTable.setText(0, 2, "Predicador");	
-		            stocksFlexTable.setText(0, 3, "Reproducir");	
-		            stocksFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
-		            stocksFlexTable.addStyleName("watchList");
-		            stocksFlexTable.getCellFormatter().addStyleName(0, 1, "watchListNumericColumn");
-		            stocksFlexTable.getCellFormatter().addStyleName(0, 2, "watchListNumericColumn"); 
 		            
-		            stocksFlexTable.setCellPadding(6);
-		            
-		            
+		            sermonesgrid = new ArrayList<>();
 		            // llamada para recuperar los sermones
 		            		      
 		    		String url = URL.encode(JSON_URL);		
@@ -151,21 +150,14 @@ public class Gwt implements IsWidget, EntryPoint {
 		    		        @Override
 		    				public void onResponseReceived(Request request, Response response) {
 		    		          if (200 == response.getStatusCode()) {
-		    		        	  JsArray<SermonData> sermones= JsonUtils.safeEval(response.getText());
-		    		        	  
-		    		        	 
-		    		        	  int row = stocksFlexTable.getRowCount();		    		 		 
+		    		        	  JsArray<SermonData> sermones= JsonUtils.safeEval(response.getText());		    		        	  		    		        	 		    		        	   		 		
 		    		  		    
 		    		        	  for (int i = 0; i < sermones.length(); i++) {		    		        		 
-		    				    	    stocksFlexTable.setText(row, 0, String.valueOf(sermones.get(i).getId()));
-		    				    	    stocksFlexTable.setText(row, 1, sermones.get(i).getName());
-		    				    	    stocksFlexTable.setText(row, 2, sermones.get(i).getName_of_predicador());		    				    	   		    				    	   
-		    				    	    Button playButton = new Button("Play");		
-		    				    	    playButton.addStyleDependentName("remove");
-		    				    	    stocksFlexTable.setWidget(row, 3, playButton);
-		    				    	    row++;
+		    		        		  Sermon nsermon =new Sermon(sermones.get(i).getId(), sermones.get(i).getName(), sermones.get(i).getName_of_predicador(), sermones.get(i).getDescripcion(), sermones.get(i).getSerie(), sermones.get(i).getDurationSeg(), new Date());
+		    		        		  sermonesgrid.add(nsermon);		    		        		  
 		    		        	    }
-		    		        	  
+		    		        	  RowExpanderGrid a=new RowExpanderGrid(sermonesgrid);
+		    			            c.add(a.asWidget());
 		    		          } else {
 		    		            //displayError("Couldn't retrieve JSON (" + response.getStatusText()+ ")");		    		        	  
 		    		          }
@@ -173,10 +165,7 @@ public class Gwt implements IsWidget, EntryPoint {
 		    		      });
 		    		    } catch (RequestException e) {
 		    		      //displayError("Couldn't retrieve JSON");		    		 
-		    		    }
-		     	            	         	        
-	            c.add(stocksFlexTable,layoutData);
-	            
+		    		    }		     	            		    		   		    		   		            	            
 	            addToCenter(c);
 	          }
 	        }
@@ -450,6 +439,21 @@ public class Gwt implements IsWidget, EntryPoint {
 	    toggleGroup.add(button);
 	    button.addValueChangeHandler(valueChangeHandler);
 	    button.setAllowDepress(false);
+	    button.setIconAlign(IconAlign.LEFT);
+	    switch(cont)
+	    {
+	    case 1:
+		    button.setIcon(Images.INSTANCE.logo());
+		    cont++;
+		    break;
+	    case 2:
+		    button.setIcon(Images.INSTANCE.logo2());
+		    cont++;
+		    break;	
+		default:
+			button.setIcon(Images.INSTANCE.default1());
+			break;
+	    }
 	    return button;
 	  }
 	
@@ -519,5 +523,19 @@ public class Gwt implements IsWidget, EntryPoint {
 		});*/
 		 RootPanel.get("layout").add(asWidget());
 	}
+	
+	public interface Images extends ClientBundle {
+		public Images INSTANCE = GWT.create(Images.class);
+		  
+		  @Source("bible1.png")
+		  ImageResource logo();
+		  
+		  @Source("add2.png")
+		  ImageResource logo2();
+		  
+		  @Source("default.png")
+		  ImageResource default1();
+		}
 }
+
 
