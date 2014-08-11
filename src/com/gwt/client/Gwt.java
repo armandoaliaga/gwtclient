@@ -74,17 +74,10 @@ import com.sun.java.swing.plaf.windows.resources.windows;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class Gwt implements IsWidget, EntryPoint {
-	
-	
-	
-	private ArrayList<Sermon> sermonesgrid=null;
-	
+public class Gwt implements IsWidget, EntryPoint {	
+	private ArrayList<Sermon> sermonesgrid=null;	
 	
 	private static final String JSON_URL = GWT.getModuleBaseURL() + "sermones";
-	
-	
-	
 	
 	private String button1Text = "Button 1";
 	  private String button2Text = "Button 2";
@@ -122,7 +115,7 @@ public class Gwt implements IsWidget, EntryPoint {
 	      lccenter = new ContentPanel();
 	      lccenter.setHeaderVisible(false);
 	      lccenter.add(new HTML(
-	          "<p style=\"padding:10px;color:#556677;font-size:11px;\">Bienvenido seleccione su opcion</p>"));
+	          "<h3 style=\"padding:10px;color:#556677;font-size:20px;\">Bienvenido seleccione su opcion</h3>"));
 	 
 	      MarginData center = new MarginData(new Margins(5));
 	 
@@ -159,7 +152,7 @@ public class Gwt implements IsWidget, EntryPoint {
 		    		        	  JsArray<SermonData> sermones= JsonUtils.safeEval(response.getText());		    		        	  		    		        	 		    		        	   		 		
 		    		  		    
 		    		        	  for (int i = 0; i < sermones.length(); i++) {		    		        		 
-		    		        		  Sermon nsermon =new Sermon(sermones.get(i).getId(), sermones.get(i).getName(), sermones.get(i).getName_of_predicador(), sermones.get(i).getDescripcion(), sermones.get(i).getSerie(), sermones.get(i).getDurationSeg(), new Date());
+		    		        		  Sermon nsermon =new Sermon(sermones.get(i).getId(), sermones.get(i).getName(), sermones.get(i).getName_of_predicador(), sermones.get(i).getDescripcion(), sermones.get(i).getSerie(), sermones.get(i).getDurationSeg(),  sermones.get(i).getFecha());
 		    		        		  sermonesgrid.add(nsermon);		    		        		  
 		    		        	    }
 		    		        	  RowExpanderGrid a=new RowExpanderGrid(sermonesgrid);

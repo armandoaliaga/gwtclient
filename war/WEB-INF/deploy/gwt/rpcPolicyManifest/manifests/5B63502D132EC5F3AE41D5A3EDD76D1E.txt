@@ -1,0 +1,2 @@
+serviceClass: com.gwt.client.SubmitSermonService
+path: 691109EB28D29F82CA61389CD9DCD7EB.gwt.rpc

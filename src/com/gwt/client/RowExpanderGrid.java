@@ -1,30 +1,40 @@
 package com.gwt.client;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.cell.client.AbstractCell;
-import com.google.gwt.cell.client.DateCell;
-import com.google.gwt.cell.client.Cell.Context;
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.i18n.client.LocalizableResource.Key;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.data.shared.Store;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.RowExpander;
+import com.sencha.gxt.widget.core.client.info.Info;
+import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 
 public class RowExpanderGrid implements IsWidget {
 	 
 	  private static final SermonProperties props = GWT.create(SermonProperties.class);
 	  private ContentPanel panel;
 	  private final ArrayList<Sermon> sermones;
+	  private ListStore<Sermon> store;
 	  public RowExpanderGrid(ArrayList<Sermon> sermonesgrid)
 	  {
 		  sermones=sermonesgrid;
@@ -33,9 +43,7 @@ public class RowExpanderGrid implements IsWidget {
 	  @Override
 	  public Widget asWidget() {
 	    if (panel == null) {
-	      final NumberFormat number = NumberFormat.getFormat("0.00");
-	      final String desc = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed metus nibh, sodales a, porta at, vulputate eget, dui. Pellentesque ut nisl. Maecenas tortor turpis, interdum non, sodales non, iaculis ac, lacus. Vestibulum auctor, tortor quis iaculis malesuada, libero lectus bibendum purus, sit amet tincidunt quam turpis vel lacus. In pellentesque nisl non sem. Suspendisse nunc sem, pretium eget, cursus a, fringilla vel, urna.<br/><br/>Aliquam commodo ullamcorper erat. Nullam vel justo in neque porttitor laoreet. Aenean lacus dui, consequat eu, adipiscing eget, nonummy non, nisi. Morbi nunc est, dignissim non, ornare sed, luctus eu, massa. Vivamus eget quam. Vivamus tincidunt diam nec urna. Curabitur velit.";
-	 
+	      final NumberFormat number = NumberFormat.getFormat("0.00");	      
 	      RowExpander<Sermon> expander = new RowExpander<Sermon>(new AbstractCell<Sermon>() {
 	        @Override
 	        public void render(Context context, Sermon value, SafeHtmlBuilder sb) {
@@ -60,8 +68,9 @@ public class RowExpanderGrid implements IsWidget {
 	        }
 	      });
 	 
-	      ColumnConfig<Sermon, Date> lastTransCol = new ColumnConfig<Sermon, Date>(props.date(), 121, "Fecha");
-	      lastTransCol.setCell(new DateCell(DateTimeFormat.getFormat("MM/dd/yyyy")));
+	      ColumnConfig<Sermon, String> lastTransCol = new ColumnConfig<Sermon, String>(props.date(), 121, "Fecha (yyyy-mm-dd)");
+	      /*ColumnConfig<Sermon, Date> lastTransCol = new ColumnConfig<Sermon, Date>(props.date(), 121, "Fecha (yyyy-mm-dd)");
+	      lastTransCol.setCell(new DateCell(DateTimeFormat.getFormat("MM/dd/yyyy")));*/
 	 
 	      List<ColumnConfig<Sermon, ?>> l = new ArrayList<ColumnConfig<Sermon, ?>>();
 	      l.add(expander);
@@ -72,7 +81,7 @@ public class RowExpanderGrid implements IsWidget {
 	      l.add(lastTransCol);
 	      ColumnModel<Sermon> cm = new ColumnModel<Sermon>(l);
 	 
-	      ListStore<Sermon> store = new ListStore<Sermon>(props.key());	      
+	      store = new ListStore<Sermon>(props.key());	      
 		store.addAll(sermones);	      
 	 
 	      panel = new ContentPanel();
@@ -87,10 +96,45 @@ public class RowExpanderGrid implements IsWidget {
 	      grid.getView().setStripeRows(true);
 	      grid.getView().setColumnLines(true);
 	 
-	      expander.initPlugin(grid);
-	      panel.setWidget(grid);
-	    }
+	      expander.initPlugin(grid);	
+	      
+	      
+	      //Buscador
+	      
+	      ToolBar toolBar = new ToolBar();
+	        
+	      final TextField search = new TextField();
+	      search.setWidth(800);	     	     	     
+	      search.addKeyUpHandler(new KeyUpHandler() {
+			
+			@Override
+			public void onKeyUp(KeyUpEvent event) {				
+				ActualizarGrid(search.getText());
+				if(store.size()==0)
+					Info.display("Mensaje","Ninguna coincidencia encontrada");
+			}
+		});
+	      
+	      final FieldLabel seachlabel= new FieldLabel(search, "Buscar");
+	      toolBar.add(seachlabel);
+	      toolBar.add(search);
+	      
+	      VerticalLayoutContainer con = new VerticalLayoutContainer();
+	      con.setBorders(true);
+	      con.add(toolBar, new VerticalLayoutData(1, -1));
+	      con.add(grid, new VerticalLayoutData(1, 1));
+	      
+	      panel.setWidget(con);
+	    }	    
 	 
 	    return panel;
 	  }
+
+	protected void ActualizarGrid(String text) {		
+		store.clear();			
+		for (int i = 0; i < sermones.size(); i++) {
+			if(sermones.get(i).getName().toLowerCase().contains(text.toLowerCase()))
+				store.add(sermones.get(i));
+		}
+	}
 }

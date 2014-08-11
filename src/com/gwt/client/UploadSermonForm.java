@@ -65,7 +65,7 @@ public class UploadSermonForm implements IsWidget {
 	    con.add(new FieldLabel(serie, "Serie"), new HtmlData(".serie"));	 	   
 	 
 	    final DateField Date = new DateField();
-	    Date.setWidth(cw);
+	    Date.setWidth(cw);	 
 	    con.add(new FieldLabel(Date, "Fecha"), new HtmlData(".date"));
 	 
 	    final HtmlEditor a = new HtmlEditor();	   
@@ -100,7 +100,7 @@ public class UploadSermonForm implements IsWidget {
   	          box.setProgressText("Guardando...");
   	          box.auto();		    	         
   	          box.show();
-				submitservice.SubmitService(Name.getText(), Name_of_predicador.getText(), serie.getText(), a.getValue(), new AsyncCallback<String>() {
+				submitservice.SubmitService(Name.getText(), Name_of_predicador.getText(), serie.getText(), a.getValue(),Date.getCurrentValue(), new AsyncCallback<String>() {
 					
 					@Override
 					public void onSuccess(String result) {

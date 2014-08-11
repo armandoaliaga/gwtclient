@@ -21,6 +21,6 @@ public interface SermonProperties extends PropertyAccess<Sermon>{
 	   
 	  ValueProvider<Sermon, Integer> duration();
 	   
-	  ValueProvider<Sermon, Date> date();
+	  ValueProvider<Sermon, String> date();
 	 
 }

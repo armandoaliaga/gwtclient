@@ -9,11 +9,11 @@ public class Sermon {
 	 private String description;
 	 private String serie;
 	 private int duration;
-	 private Date date = new Date();
+	 private String date;
 	 
 	 
 	 
-	public Sermon(int id, String name, String name_of_predicador,String description, String serie, int duration, Date date) {
+	public Sermon(int id, String name, String name_of_predicador,String description, String serie, int duration, String date) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -60,10 +60,10 @@ public class Sermon {
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}	 
 }

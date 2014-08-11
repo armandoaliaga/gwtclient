@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -22,10 +25,13 @@ public class SubmitSermonServiceImpl extends RemoteServiceServlet implements Sub
 	
 	@Override
 	public String SubmitService(String name, String name_of_predicador,
-			String serie, String Descripcion) throws IllegalArgumentException {	
+			String serie, String Descripcion,Date fecha) throws IllegalArgumentException {	
 			
 		HttpClient httpclient = new DefaultHttpClient();
-		String complementoURL = url+"/addSermon/"+name.replaceAll(" ", "%20")+"/"+name_of_predicador.replaceAll(" ", "%20")+"/"+serie.replaceAll(" ", "%20")+"/"+Descripcion.replaceAll(" ", "%20");
+		Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String s = formatter.format(fecha);
+		String complementoURL = url+"/addSermon/"+name.replaceAll(" ", "%20")+"/"+name_of_predicador.replaceAll(" ", "%20")+"/"+serie.replaceAll(" ", "%20")+"/"+Descripcion.replaceAll(" ", "%20")+"/"+s;
+		System.out.print(complementoURL);
 		JSONArray jsonArray = null;
 		HttpGet httppost = new HttpGet(complementoURL);
 		try 
