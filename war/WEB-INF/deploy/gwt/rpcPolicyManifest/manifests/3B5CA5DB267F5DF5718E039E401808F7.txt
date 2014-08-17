@@ -1,0 +1,2 @@
+serviceClass: com.gwt.client.UpdateSermonService
+path: 7BC09761EE7748F55993CD9BABC98641.gwt.rpc
