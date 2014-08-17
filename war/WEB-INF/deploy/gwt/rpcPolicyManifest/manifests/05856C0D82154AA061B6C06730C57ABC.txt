@@ -1,0 +1,2 @@
+serviceClass: com.gwt.client.DeleteSermonService
+path: 0B98E9572EEB953263EA146F08B92D7B.gwt.rpc

@@ -495,67 +495,6 @@ public class Gwt implements IsWidget, EntryPoint {
 	
 	
 	public void onModuleLoad() {
-	
-		
-		/*final TextBox asdf = new TextBox();
-		String url = URL.encode(JSON_URL);		
-		 RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
-
-		    try {
-		    	Request request = builder.sendRequest(null, new RequestCallback() {
-		        @Override
-				public void onError(Request request, Throwable exception) {
-		         // displayError("Couldn't retrieve JSON");
-		        	 asdf.setText("me cago 1!");
-		        }
-
-		        @Override
-				public void onResponseReceived(Request request, Response response) {
-		          if (200 == response.getStatusCode()) {
-		        	  JsArray<SermonData> a= JsonUtils.safeEval(response.getText());
-		        	  asdf.setText(String.valueOf(a.get(0).getName_of_predicador()));		        	  
-		          } else {
-		            //displayError("Couldn't retrieve JSON (" + response.getStatusText()+ ")");
-		        	  asdf.setText("me cago2" + response.getStatusText());
-		          }
-		        }
-		      });
-		    } catch (RequestException e) {
-		      //displayError("Couldn't retrieve JSON");
-		    	 asdf.setText("me cago 3!");
-		    }
-						
-		    
-		    
-		 // Create a tree with a few items in it.
-		    TreeItem root = new TreeItem();
-		    root.setText("root");
-		    root.addTextItem("item0");
-		    root.addTextItem("item1");
-		    root.addTextItem("item2");
-
-		    // Add a CheckBox to the tree
-		    TreeItem item = new TreeItem(new CheckBox("item3"));
-		    root.addItem(item);
-
-		    Tree t = new Tree();
-		    t.addItem(root);
-
-		    // Add it to the root panel.
-		    RootPanel.get().add(t);
-		    
-		RootPanel.get("nameFieldContainer").add(asdf);*/
-		
-		
-		/*TextButton textButton = new TextButton("Verify GXT Works");
-		RootPanel.get().add(textButton);
-		textButton.addSelectHandler(new SelectHandler() {
-		  @Override
-		  public void onSelect(SelectEvent event) {
-		    MessageBox messageBox = new MessageBox("GXT Works.");
-		    messageBox.show();
-		  }
-		});*/
 		 RootPanel.get("layout").add(asWidget());
 	}
 	

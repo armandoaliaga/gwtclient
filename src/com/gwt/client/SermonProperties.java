@@ -1,6 +1,5 @@
 package com.gwt.client;
 
-import java.util.Date;
 
 import com.google.gwt.editor.client.Editor.Path;
 import com.sencha.gxt.core.client.ValueProvider;
@@ -22,5 +21,7 @@ public interface SermonProperties extends PropertyAccess<Sermon>{
 	  ValueProvider<Sermon, Integer> duration();
 	   
 	  ValueProvider<Sermon, String> date();
+	  
+	  ValueProvider<Sermon, String> play();
 	 
 }

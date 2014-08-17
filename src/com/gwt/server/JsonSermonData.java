@@ -21,14 +21,14 @@ import org.json.JSONException;
 
 public class JsonSermonData extends HttpServlet {
 
-	private static final String url = "http://10.0.0.15:8080/com.ServerPrincipal/api/v1/getSermones";
+	private static final String url = new URLSP().getUrl();
 	  
 	@Override
 	  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 	      throws ServletException, IOException {	  
 		
 			HttpClient httpclient = new DefaultHttpClient();
-			String complementoURL = url;
+			String complementoURL = url+"/getSermones";
 			JSONArray jsonArray = null;
 			HttpGet httppost = new HttpGet(complementoURL);
 			try 

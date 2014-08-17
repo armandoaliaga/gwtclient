@@ -30,5 +30,15 @@
     <servlet-name>SubmitSermonServiceImpl</servlet-name>
     <url-pattern>/gwt/SubmitSermon</url-pattern>
   </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>DeleteSermonServiceImpl</servlet-name>
+    <servlet-class>com.gwt.server.DeleteSermonServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>DeleteSermonServiceImpl</servlet-name>
+    <url-pattern>/gwt/DeleteSermon</url-pattern>
+  </servlet-mapping>
 
 </web-app>

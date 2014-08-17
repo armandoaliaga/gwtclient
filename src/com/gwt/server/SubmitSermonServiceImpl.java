@@ -21,7 +21,7 @@ import com.gwt.client.SubmitSermonService;
 
 public class SubmitSermonServiceImpl extends RemoteServiceServlet implements SubmitSermonService{
 	
-	private static final String url = "http://10.0.0.15:8080/com.ServerPrincipal/api/v1";
+	private static final String url = new URLSP().getUrl();
 	
 	@Override
 	public String SubmitService(String name, String name_of_predicador,
@@ -31,7 +31,6 @@ public class SubmitSermonServiceImpl extends RemoteServiceServlet implements Sub
 		Format formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String s = formatter.format(fecha);
 		String complementoURL = url+"/addSermon/"+name.replaceAll(" ", "%20")+"/"+name_of_predicador.replaceAll(" ", "%20")+"/"+serie.replaceAll(" ", "%20")+"/"+Descripcion.replaceAll(" ", "%20")+"/"+s;
-		System.out.print(complementoURL);
 		JSONArray jsonArray = null;
 		HttpGet httppost = new HttpGet(complementoURL);
 		try 

@@ -1,6 +1,5 @@
 package com.gwt.client;
 
-import java.util.Date;
 
 public class Sermon {
 	 private int id;
@@ -10,6 +9,7 @@ public class Sermon {
 	 private String serie;
 	 private int duration;
 	 private String date;
+	 private String play="";
 	 
 	 
 	 
@@ -63,6 +63,14 @@ public class Sermon {
 	public String getDate() {
 		return date;
 	}
+	public String getPlay() {
+		return play;
+	}
+
+	public void setPlay(String play) {
+		this.play = play;
+	}
+
 	public void setDate(String date) {
 		this.date = date;
 	}	 
