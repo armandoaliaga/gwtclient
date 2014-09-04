@@ -76,8 +76,9 @@ import com.sun.java.swing.plaf.windows.resources.windows;
  */
 public class Gwt implements IsWidget, EntryPoint {	
 	private ArrayList<Sermon> sermonesgrid=null;	
-	
+	private ArrayList<Himno> himnosgrid=null;
 	private static final String JSON_URL = GWT.getModuleBaseURL() + "sermones";
+	private static final String JSON_URL_HIMNOS = GWT.getModuleBaseURL() + "himnos";
 	
 	private String button1Text = "Button 1";
 	  private String button2Text = "Button 2";
@@ -202,16 +203,6 @@ public class Gwt implements IsWidget, EntryPoint {
 	            HBoxLayoutContainer c = new HBoxLayoutContainer();
 	            c.setPadding(new Padding(5));
 	            c.setHBoxLayoutAlign(HBoxLayoutAlign.TOP);
-	 
-	            /*c.add(new TextButton(button1Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            BoxLayoutData flex = new BoxLayoutData(new Margins(0, 5, 0, 0));
-	            flex.setFlex(1);
-	            c.add(new Label(), flex);
-	            c.add(new TextButton(button2Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new Label(), flex);
-	            c.add(new TextButton(button3Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new Label(), flex);
-	            c.add(new TextButton(button4Text), new BoxLayoutData(new Margins(0)));*/
 	            
 	            UploadSermonForm a= new UploadSermonForm();	         
 	            c.add(a.asWidget()); 
@@ -221,19 +212,58 @@ public class Gwt implements IsWidget, EntryPoint {
 	        }
 	      }), vBoxData);
 	 
-	      lcwest.add(createToggleButton("Ver Himnos", new ValueChangeHandler<Boolean>() {
+	      lcwest.add(createToggleButton("Himnos", new ValueChangeHandler<Boolean>() {
 	        @Override
 	        public void onValueChange(ValueChangeEvent<Boolean> event) {
 	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
+	        	final HBoxLayoutContainer c = new HBoxLayoutContainer();
 	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.TOP);
-	 
-	            c.add(new TextButton(button1Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button2Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button3Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button4Text), new BoxLayoutData(new Margins(0)));
-	 
+	            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
+	            c.setPack(BoxLayoutPack.CENTER);
+	 	        himnosgrid = new ArrayList<>();   
+	 	        String url = URL.encode(JSON_URL_HIMNOS);		 	      
+	    		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+	    		
+	    		try 
+	    		{
+    		    	Request request = builder.sendRequest(null, new RequestCallback() {
+    		        @Override
+    				public void onError(Request request, Throwable exception) {
+    		         // displayError("Couldn't retrieve JSON");		    		        	
+    		        }
+
+    		        @Override
+    				public void onResponseReceived(Request request, Response response) {
+    		          if (200 == response.getStatusCode()) {
+    		        	  JsArray<HimnoData> himnos= JsonUtils.safeEval(response.getText());		    		        	  		    		        	 		    		        	   		 		
+    		  		    
+    		        	  for (int i = 0; i < himnos.length(); i++) {		    		        		  
+    		        		  Himno nhimno=new Himno(himnos.get(i).getId(),himnos.get(i).getNumber(), himnos.get(i).getName(), himnos.get(i).getLyrics());    		        		  
+    		        		  himnosgrid.add(nhimno);		    		        		  
+    		        	    }    		        	  
+    		        	  HimnosView himnosview= new HimnosView(himnosgrid);
+    				      c.add(himnosview.asWidget());	        	      		        	 
+    		          } else {
+    		            //displayError("Couldn't retrieve JSON (" + response.getStatusText()+ ")");		    		        	  
+    		          }
+    		        }
+    		      });
+    		    } catch (RequestException e) {
+    		      //displayError("Couldn't retrieve JSON");		    		 
+    		    }	
+	    	
+	    		final AutoProgressMessageBox box = new AutoProgressMessageBox("En progreso", "Recuperando himnos, aguarde por favor...");
+   	          	box.setProgressText("Cargando...");
+   	          	box.auto();
+   	          	box.show();
+   	          	Timer t = new Timer() {
+    	            @Override
+    	            public void run() {		    	            	
+    	              Info.display("Mensaje", "Himnos cargados con exito!");
+    	              box.hide();
+    	            }
+   	          	};
+   	          	t.schedule(3000);	    		
 	            addToCenter(c);
 	          }
 	        }
@@ -485,6 +515,10 @@ public class Gwt implements IsWidget, EntryPoint {
 		    button.setIcon(Images.INSTANCE.logo2());
 		    cont++;
 		    break;	
+	    case 3:
+		    button.setIcon(Images.INSTANCE.himnos());
+		    cont++;
+		    break;	
 		default:
 			button.setIcon(Images.INSTANCE.default1());
 			break;
@@ -509,6 +543,9 @@ public class Gwt implements IsWidget, EntryPoint {
 		  
 		  @Source("default.png")
 		  ImageResource default1();
+		  
+		  @Source("himnos.png")
+		  ImageResource himnos();
 		}
 }
 

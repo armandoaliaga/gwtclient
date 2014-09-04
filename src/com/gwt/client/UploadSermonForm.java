@@ -105,7 +105,11 @@ public class UploadSermonForm implements IsWidget {
 					@Override
 					public void onSuccess(String result) {
 						 
-		    	 
+							Name.setText("");
+							Name_of_predicador.setText("");
+							serie.setText("");
+							a.setValue("");
+							Date.setText("");
 		    	          Timer t = new Timer() {
 		    	            @Override
 		    	            public void run() {		    	            	

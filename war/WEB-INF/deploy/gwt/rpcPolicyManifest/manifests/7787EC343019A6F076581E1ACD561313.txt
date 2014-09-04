@@ -1,0 +1,2 @@
+serviceClass: com.gwt.client.DeleteHimnoService
+path: 468ABFA5F91457FE776659662C9AF39C.gwt.rpc

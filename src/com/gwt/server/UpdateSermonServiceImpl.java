@@ -12,10 +12,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.gwt.client.UpdateSermonService;
 
@@ -25,13 +27,14 @@ public class UpdateSermonServiceImpl extends RemoteServiceServlet implements Upd
 	
 	@Override
 	public String UpdateService(int id,String name, String name_of_predicador,String serie, String Descripcion, Date fecha)throws IllegalArgumentException {
-		
+
 		HttpClient httpclient = new DefaultHttpClient();
 		Format formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String s = formatter.format(fecha);
 		String complementoURL = url+"/updateSermon/"+id+"/"+name.replaceAll(" ", "%20")+"/"+name_of_predicador.replaceAll(" ", "%20")+"/"+serie.replaceAll(" ", "%20")+"/"+Descripcion.replaceAll(" ", "%20")+"/"+s;
 		JSONArray jsonArray = null;
 		HttpGet httppost = new HttpGet(complementoURL);
+	
 		try 
 		{
 			HttpResponse response = httpclient.execute(httppost);

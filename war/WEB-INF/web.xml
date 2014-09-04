@@ -51,4 +51,25 @@
     <url-pattern>/gwt/UpdateSermon</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>jsonHimnoData</servlet-name>
+    <servlet-class>com.gwt.server.JsonHimnoData</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>jsonHimnoData</servlet-name>
+    <url-pattern>/gwt/himnos</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>DeleteHimnoServiceImpl</servlet-name>
+    <servlet-class>com.gwt.server.DeleteHimnoServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>DeleteHimnoServiceImpl</servlet-name>
+    <url-pattern>/gwt/DeleteHimno</url-pattern>
+  </servlet-mapping>
+  
+  
 </web-app>
