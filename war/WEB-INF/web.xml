@@ -71,5 +71,14 @@
     <url-pattern>/gwt/DeleteHimno</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>SubmitHimnoServiceImpl</servlet-name>
+    <servlet-class>com.gwt.server.SubmitHimnoServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>SubmitHimnoServiceImpl</servlet-name>
+    <url-pattern>/gwt/SubmitHimno</url-pattern>
+  </servlet-mapping>
   
 </web-app>

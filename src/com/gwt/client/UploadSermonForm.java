@@ -1,10 +1,16 @@
 package com.gwt.client;
+import java.nio.file.attribute.FileAttribute;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -75,7 +81,8 @@ public class UploadSermonForm implements IsWidget {
 	    final FileUploadField file = new FileUploadField();	 
 	    file.setWidth(cw);
 	    con.add(new FieldLabel(file, "File"), new HtmlData(".file"));
-	   /* file.addChangeHandler(new ChangeHandler() {
+	
+	    file.addChangeHandler(new ChangeHandler() {
 	    	 
 	        @Override
 	        public void onChange(ChangeEvent event) {
@@ -83,7 +90,7 @@ public class UploadSermonForm implements IsWidget {
 	        }
 	      });
 	    file.setName("uploadedfile");
-	    file.setAllowBlank(false);*/
+	    file.setAllowBlank(false);
 	 	   
 	    panel.addButton(new TextButton("Cancel",new SelectHandler() {
 			
@@ -91,11 +98,12 @@ public class UploadSermonForm implements IsWidget {
 			public void onSelect(SelectEvent event) {
 				Window.alert("Button Cancel");
 			}
-		}));
+		}));	   
+	    
 	    panel.addButton(new TextButton("Submit",new SelectHandler() {
 			
 			@Override
-			public void onSelect(SelectEvent event) {									
+			public void onSelect(SelectEvent event) {
 			  final AutoProgressMessageBox box = new AutoProgressMessageBox("En progreso", "Guardando sermon, por favor espere...");
   	          box.setProgressText("Guardando...");
   	          box.auto();		    	         

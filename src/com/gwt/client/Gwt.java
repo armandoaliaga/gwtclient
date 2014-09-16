@@ -1,6 +1,7 @@
 package com.gwt.client;
 
 
+import java.awt.Panel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -80,21 +81,18 @@ public class Gwt implements IsWidget, EntryPoint {
 	private static final String JSON_URL = GWT.getModuleBaseURL() + "sermones";
 	private static final String JSON_URL_HIMNOS = GWT.getModuleBaseURL() + "himnos";
 	
-	private String button1Text = "Button 1";
-	  private String button2Text = "Button 2";
-	  private String button3Text = "Button 3";
-	  private String button4Text = "Button 4";
+
 	  private ContentPanel lccenter;
-	  private ToggleGroup toggleGroup = new ToggleGroup();
+	  private ToggleGroup toggleGroup = new ToggleGroup();	 
 	  private ScrollPanel con;
 	  private int cont=1;
 	 
 	  @Override
 	  public Widget asWidget() {
-	    if (con == null) {
+	    if (con == null) {	    
 	    cont=1;
 	      con = new ScrollPanel();
-	      con.setLayoutData(new MarginData(10));
+	      con.setLayoutData(new MarginData(1));
 	 
 	      ContentPanel panel = new ContentPanel();
 	      panel.setHeadingText("Help Church Menu");
@@ -123,7 +121,7 @@ public class Gwt implements IsWidget, EntryPoint {
 	      border.setCenterWidget(lccenter, center);
 	 
 	      BoxLayoutData vBoxData = new BoxLayoutData(new Margins(5, 5, 5, 5));
-	      vBoxData.setFlex(1);
+	      vBoxData.setFlex(8);
 	 
 	      lcwest.add(createToggleButton("Sermones", new ValueChangeHandler<Boolean>() {
 	        @Override
@@ -184,7 +182,7 @@ public class Gwt implements IsWidget, EntryPoint {
 	        }
 	      }), vBoxData);
 	 
-	      lcwest.add(createToggleButton("Subir Sermones", new ValueChangeHandler<Boolean>() {
+	      lcwest.add(createToggleButton("Subir Sermon", new ValueChangeHandler<Boolean>() {
 	        @Override
 	        public void onValueChange(ValueChangeEvent<Boolean> event) {
 	          if (event.getValue()) {
@@ -269,20 +267,19 @@ public class Gwt implements IsWidget, EntryPoint {
 	        }
 	      }), vBoxData);
 	 
-	      lcwest.add(createToggleButton("Subir Himnos", new ValueChangeHandler<Boolean>() {
+	      lcwest.add(createToggleButton("Subir Himno", new ValueChangeHandler<Boolean>() {
 	        @Override
 	        public void onValueChange(ValueChangeEvent<Boolean> event) {
 	          if (event.getValue()) {
 	            HBoxLayoutContainer c = new HBoxLayoutContainer();
 	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.MIDDLE);
+	            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
+	            c.setPack(BoxLayoutPack.CENTER);
 	 
-	            c.add(new TextButton(button1Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button2Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button3Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button4Text), new BoxLayoutData(new Margins(0)));
+	            UploadHimnoForm a=new UploadHimnoForm();
+	            c.add(a.asWidget());
 	           
-	            final Dialog simple = new Dialog();
+	           /* final Dialog simple = new Dialog();
 	            simple.setHeadingText("Dialog Test");
 	            simple.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.NO);
 	            simple.setBodyStyleName("pad-text");
@@ -291,203 +288,36 @@ public class Gwt implements IsWidget, EntryPoint {
 	            simple.setHideOnButtonClick(true);
 	            simple.setWidth(300);
 	            simple.add(new Button("asdsa"));
-	            simple.show();
+	            simple.show();*/
 	            addToCenter(c);
 	          }
 	        }
-	      }), vBoxData);
-	 
-	      lcwest.add(createToggleButton("Programa", new ValueChangeHandler<Boolean>() {
-	        @Override
-	        public void onValueChange(ValueChangeEvent<Boolean> event) {
-	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.BOTTOM);
-	 
-	            c.add(new TextButton(button1Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button2Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button3Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button4Text), new BoxLayoutData(new Margins(0)));
-	 
-	            addToCenter(c);
-	          }
-	        }
-	      }), vBoxData);
-	 
-	      lcwest.add(createToggleButton("Align: stretch", new ValueChangeHandler<Boolean>() {
-	        @Override
-	        public void onValueChange(ValueChangeEvent<Boolean> event) {
-	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	 
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
-	 
-	            c.add(new TextButton(button1Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button2Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button3Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button4Text), new BoxLayoutData(new Margins(0)));
-	 
-	            addToCenter(c);
-	          }
-	        }
-	      }), vBoxData);
-	 
-	      lcwest.add(createToggleButton("Align: stretchmax", new ValueChangeHandler<Boolean>() {
-	        @Override
-	        public void onValueChange(ValueChangeEvent<Boolean> event) {
-	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCHMAX);
-	 
-	            c.add(new TextButton(button1Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button2Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button3Text), new BoxLayoutData(new Margins(0, 5, 0, 0)));
-	            c.add(new TextButton(button4Text), new BoxLayoutData(new Margins(0)));
-	 
-	            addToCenter(c);
-	          }
-	        }
-	      }), vBoxData);
-	 
-	      lcwest.add(createToggleButton("Flex: All even", new ValueChangeHandler<Boolean>() {
-	        @Override
-	        public void onValueChange(ValueChangeEvent<Boolean> event) {
-	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	 
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.MIDDLE);
-	 
-	            BoxLayoutData flex = new BoxLayoutData(new Margins(0, 5, 0, 0));
-	            flex.setFlex(1);
-	            c.add(new TextButton(button1Text), flex);
-	            c.add(new TextButton(button2Text), flex);
-	            c.add(new TextButton(button3Text), flex);
-	 
-	            BoxLayoutData flex2 = new BoxLayoutData(new Margins(0));
-	            flex2.setFlex(1);
-	            c.add(new TextButton(button4Text), flex2);
-	 
-	            addToCenter(c);
-	          }
-	        }
-	      }), vBoxData);
-	 
-	      lcwest.add(createToggleButton("Flex: ratio", new ValueChangeHandler<Boolean>() {
-	        @Override
-	        public void onValueChange(ValueChangeEvent<Boolean> event) {
-	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.MIDDLE);
-	 
-	            BoxLayoutData flex = new BoxLayoutData(new Margins(0, 5, 0, 0));
-	            flex.setFlex(1);
-	            c.add(new TextButton(button1Text), flex);
-	            c.add(new TextButton(button2Text), flex);
-	            c.add(new TextButton(button3Text), flex);
-	 
-	            BoxLayoutData flex2 = new BoxLayoutData(new Margins(0));
-	            flex2.setFlex(3);
-	            c.add(new TextButton(button4Text), flex2);
-	 
-	            addToCenter(c);
-	          }
-	        }
-	      }), vBoxData);
-	 
-	      lcwest.add(createToggleButton("Flex + Stretch", new ValueChangeHandler<Boolean>() {
-	        @Override
-	        public void onValueChange(ValueChangeEvent<Boolean> event) {
-	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
-	 
-	            BoxLayoutData flex = new BoxLayoutData(new Margins(0, 5, 0, 0));
-	            flex.setFlex(1);
-	            c.add(new TextButton(button1Text), flex);
-	            c.add(new TextButton(button2Text), flex);
-	            c.add(new TextButton(button3Text), flex);
-	 
-	            BoxLayoutData flex2 = new BoxLayoutData(new Margins(0));
-	            flex2.setFlex(3);
-	            c.add(new TextButton(button4Text), flex2);
-	 
-	            addToCenter(c);
-	          }
-	        }
-	      }), vBoxData);
-	 
-	      lcwest.add(createToggleButton("Pack: start", new ValueChangeHandler<Boolean>() {
-	        @Override
-	        public void onValueChange(ValueChangeEvent<Boolean> event) {
-	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.MIDDLE);
-	            c.setPack(BoxLayoutPack.START);
-	 
-	            BoxLayoutData layoutData = new BoxLayoutData(new Margins(0, 5, 0, 0));
-	            c.add(new TextButton(button1Text), layoutData);
-	            c.add(new TextButton(button2Text), layoutData);
-	            c.add(new TextButton(button3Text), layoutData);
-	 
-	            BoxLayoutData layoutData2 = new BoxLayoutData(new Margins(0));
-	            c.add(new TextButton(button4Text), layoutData2);
-	 
-	            addToCenter(c);
-	          }
-	        }
-	      }), vBoxData);
-	 
-	      lcwest.add(createToggleButton("Pack: center", new ValueChangeHandler<Boolean>() {
-	        @Override
-	        public void onValueChange(ValueChangeEvent<Boolean> event) {
-	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.MIDDLE);
-	            c.setPack(BoxLayoutPack.CENTER);
-	 
-	            BoxLayoutData layoutData = new BoxLayoutData(new Margins(0, 5, 0, 0));
-	            c.add(new TextButton(button1Text), layoutData);
-	            c.add(new TextButton(button2Text), layoutData);
-	            c.add(new TextButton(button3Text), layoutData);
-	 
-	            BoxLayoutData layoutData2 = new BoxLayoutData(new Margins(0));
-	            c.add(new TextButton(button4Text), layoutData2);
-	 
-	            addToCenter(c);
-	          }
-	        }
-	      }), vBoxData);
-	 
-	      lcwest.add(createToggleButton("Pack: end", new ValueChangeHandler<Boolean>() {
-	        @Override
-	        public void onValueChange(ValueChangeEvent<Boolean> event) {
-	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.MIDDLE);
-	            c.setPack(BoxLayoutPack.END);
-	 
-	            BoxLayoutData layoutData = new BoxLayoutData(new Margins(0, 5, 0, 0));
-	            c.add(new TextButton(button1Text), layoutData);
-	            c.add(new TextButton(button2Text), layoutData);
-	            c.add(new TextButton(button3Text), layoutData);
-	 
-	            BoxLayoutData layoutData2 = new BoxLayoutData(new Margins(0));
-	            c.add(new TextButton(button4Text), layoutData2);
-	 
-	            addToCenter(c);
-	          }
-	        }
-	      }), vBoxData);
-	 
+	      }), vBoxData);	
+	      
+	      lcwest.add(createToggleButton("Default", new ValueChangeHandler<Boolean>() {
+		        @Override
+		        public void onValueChange(ValueChangeEvent<Boolean> event) {
+		          if (event.getValue()) {
+		            HBoxLayoutContainer c = new HBoxLayoutContainer();
+		            c.setPadding(new Padding(5));
+		            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
+		            c.setPack(BoxLayoutPack.CENTER);
+		            addToCenter(c);
+		          }
+		        }
+		      }), vBoxData);	
+	      lcwest.add(createToggleButton("Default", new ValueChangeHandler<Boolean>() {
+		        @Override
+		        public void onValueChange(ValueChangeEvent<Boolean> event) {
+		          if (event.getValue()) {
+		            HBoxLayoutContainer c = new HBoxLayoutContainer();
+		            c.setPadding(new Padding(5));
+		            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
+		            c.setPack(BoxLayoutPack.CENTER);
+		            addToCenter(c);
+		          }
+		        }
+		      }), vBoxData);	
 	      con.add(panel);
 	    }
 	    return con;
@@ -503,12 +333,12 @@ public class Gwt implements IsWidget, EntryPoint {
 	    ToggleButton button = new ToggleButton(name);
 	    toggleGroup.add(button);
 	    button.addValueChangeHandler(valueChangeHandler);
-	    button.setAllowDepress(false);
-	    button.setIconAlign(IconAlign.LEFT);
+	    button.setAllowDepress(false);	    
+	    button.setIconAlign(IconAlign.LEFT);	   
 	    switch(cont)
 	    {
 	    case 1:
-		    button.setIcon(Images.INSTANCE.logo());
+		    button.setIcon(Images.INSTANCE.logo());		   
 		    cont++;
 		    break;
 	    case 2:
@@ -517,6 +347,10 @@ public class Gwt implements IsWidget, EntryPoint {
 		    break;	
 	    case 3:
 		    button.setIcon(Images.INSTANCE.himnos());
+		    cont++;
+		    break;	
+	    case 4:
+		    button.setIcon(Images.INSTANCE.logo2());		    
 		    cont++;
 		    break;	
 		default:
@@ -543,6 +377,9 @@ public class Gwt implements IsWidget, EntryPoint {
 		  
 		  @Source("default.png")
 		  ImageResource default1();
+		  
+		  @Source("Add3.png")
+		  ImageResource add3();
 		  
 		  @Source("himnos.png")
 		  ImageResource himnos();

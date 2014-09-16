@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ClientBundle.Source;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -24,6 +25,8 @@ import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer.HorizontalLayoutData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.CellClickEvent;
+import com.sencha.gxt.widget.core.client.event.CellClickEvent.CellClickHandler;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent.DialogHideHandler;
@@ -151,11 +154,7 @@ public class HimnosView implements IsWidget  {
 			
 			
 			
-			final Grid<Himno> grid = new Grid<Himno>(store, cm);
-		      grid.getView().setAutoExpandColumn(nameCol);
-		      grid.setBorders(false);
-		      grid.getView().setStripeRows(true);
-		      grid.getView().setColumnLines(true);		     
+			
 		      
 		      
 			panel = new ContentPanel();
@@ -165,26 +164,37 @@ public class HimnosView implements IsWidget  {
 			panel.addStyleName("margin-10");
 			
 			
-			HtmlEditor a= new HtmlEditor();			
-			a.setEnableAlignments(false);
-			a.setEnableColors(false);			
-			a.setEnableFont(false);
-			a.setEnableFontSize(false);
-			a.setEnableFormat(false);
-			a.setEnableLinks(false);
-			a.setEnableLists(false);
-			a.setEnableSourceEditMode(false);		
-			a.setValue("<p align='center'>Seleccione un himno para ver la letra.</p>");			
-			
-			TextArea textarea=new TextArea();			
-			textarea.setBorders(true);
-			textarea.setPreventScrollbars(true);	
-			textarea.setText("This is my statement one. \n This is my statement2");
+			final HtmlEditor htmleditor= new HtmlEditor();			
+			htmleditor.setEnableAlignments(false);
+			htmleditor.setEnableColors(false);			
+			htmleditor.setEnableFont(false);
+			htmleditor.setEnableFontSize(false);
+			htmleditor.setEnableFormat(false);
+			htmleditor.setEnableLinks(false);
+			htmleditor.setEnableLists(false);
+			htmleditor.setEnableSourceEditMode(false);				
+			htmleditor.setValue("<textarea rows='34' cols='92' disabled align='center' style='text-align: center;color:#0B0B61;vertical-align: middle; display: block;margin-left: auto;margin-right: auto;font-weight: bold' >Seleccione un himno para ver la letra.</textarea>");								
 		
+			final Grid<Himno> grid = new Grid<Himno>(store, cm);
+		      grid.getView().setAutoExpandColumn(nameCol);
+		      grid.setBorders(false);
+		      grid.getView().setStripeRows(true);
+		      grid.getView().setColumnLines(true);		     
+		      
+		      grid.addCellClickHandler(new CellClickHandler() {
+				
+				@Override
+				public void onCellClick(CellClickEvent event) {
+					Himno selected_himno = grid.getStore().get(event.getRowIndex());					
+					htmleditor.setValue("<textarea rows='34' cols='92' disabled align='center' style='text-align: center;color:#0B0B61;vertical-align: middle; display: block;margin-left: auto;margin-right: auto;font-weight: bold' >"+selected_himno.getLyrics()+"</textarea>");					
+				}
+			});
+			
+			
 			hlcontainer = new HorizontalLayoutContainer();
 			hlcontainer.setBorders(false);		
 			hlcontainer.add(grid, new HorizontalLayoutData(-1, 1));
-			hlcontainer.add(a, new HorizontalLayoutData(1, 1));
+			hlcontainer.add(htmleditor, new HorizontalLayoutData(1, 1));
 			
 			
 			
