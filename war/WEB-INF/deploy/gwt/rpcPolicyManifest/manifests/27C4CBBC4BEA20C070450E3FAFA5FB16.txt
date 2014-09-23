@@ -1,0 +1,2 @@
+serviceClass: com.gwt.client.UpdateHimnoService
+path: C0FBC525CCCA9AFDFF166175C0ECB5B8.gwt.rpc

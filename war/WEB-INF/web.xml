@@ -81,4 +81,14 @@
     <url-pattern>/gwt/SubmitHimno</url-pattern>
   </servlet-mapping>
   
+   <servlet>
+    <servlet-name>UpdateHimnoServiceImpl</servlet-name>
+    <servlet-class>com.gwt.server.UpdateHimnoServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>UpdateHimnoServiceImpl</servlet-name>
+    <url-pattern>/gwt/UpdateHimno</url-pattern>
+  </servlet-mapping>
+  
 </web-app>

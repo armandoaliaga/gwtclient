@@ -30,8 +30,10 @@ public class SubmitHimnoServiceImpl extends RemoteServiceServlet implements Subm
 		HttpClient httpclient = new DefaultHttpClient();		
 		String s_lyrics="";
 		for (int i = 0; i < lyrics.size(); i++) {
-			s_lyrics=s_lyrics+" " +lyrics.get(i).replace("\n", " ").replace("\r", " ")+"%3E";
+			s_lyrics=s_lyrics+lyrics.get(i).replace("\n", "%3C").replace("\r", "%3C")+"%3E";
 		}
+		s_lyrics=s_lyrics.replaceAll("/", "%2F");
+		s_lyrics=s_lyrics.replaceAll(";", "%3B");		
 		String complementoURL = url+"/himnos/addHimno/"+numero.replaceAll(" ", "%20")+"/"+name.replaceAll(" ", "%20")+"/"+s_lyrics.replaceAll(" ", "%20");
 		JSONArray jsonArray = null;
 		HttpGet httppost = new HttpGet(complementoURL);

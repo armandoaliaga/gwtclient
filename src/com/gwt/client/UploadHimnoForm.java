@@ -42,6 +42,9 @@ public class UploadHimnoForm implements IsWidget {
 	private TextArea estrofa;
 	private ContentPanel hp;
 	private TextButton siguiente;
+	private int n_estrofas;
+	private ArrayList<String> estrofas;
+	private int n;
 	@Override
 	public Widget asWidget() {
 			
@@ -131,20 +134,22 @@ public class UploadHimnoForm implements IsWidget {
 				file.disable();
 				numeroEstrofas.setEnabled(false);
 				vp3.add(clc);		
-				final int n_estrofas=Integer.parseInt(numeroEstrofas.getValue(numeroEstrofas.getSelectedIndex()));
-				final ArrayList<String> estrofas=new ArrayList<>();			
-				
-				
+				n_estrofas=Integer.parseInt(numeroEstrofas.getValue(numeroEstrofas.getSelectedIndex()));
+				estrofas=new ArrayList<>();	
+				estrofas.clear();
+				hp.setHeadingText("Estrofa 1");
+				n= estrofas.size()+1;
 				siguiente.addSelectHandler(new SelectHandler() {
 					
 					@Override
 					public void onSelect(SelectEvent event) {
-						if(estrofas.size()!= n_estrofas-1)
+						if(estrofas.size()< n_estrofas-1)
 						{
 							if(!estrofa.getText().isEmpty())
 							{
 								estrofas.add(estrofa.getText());
-								int n=estrofas.size()+1;
+								n=estrofas.size()+1;
+								//Window.alert(n+"");
 								hp.setHeadingText("Estrofa "+n);
 								estrofa.setText("");													
 							}	
@@ -169,7 +174,10 @@ public class UploadHimnoForm implements IsWidget {
 									numero.setText("");
 									Name.setText("");									
 									estrofa.setText("");
+									estrofas.clear();
 									Info.display("Mensaje",result);
+									//Window.alert(result);
+									Name.setText(result);
 								}
 								
 								@Override
@@ -198,12 +206,6 @@ public class UploadHimnoForm implements IsWidget {
 	        '<tr><td class=numero width=50%></td><td class=name width=50%></td></tr>',
 	        '<tr><td class=file width=50%></td></tr><tr><td class=ne width=50%></td></tr>','</table>'	 
 	    ].join("");
-	  }-*/;	 
-	  
-	  private native String getTableEstrofoas() /*-{
-	    return [ '<table width=50% cellpadding=0 cellspacing=0>',
-	        '<tr><td class=e1 aling="center" width=50% ></tr>','</table>'	 
-	    ].join("");
-	  }-*/;	 
+	  }-*/;	 	  	 
 	  	  
 }
