@@ -14,8 +14,12 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ClientBundle.Source;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwt.client.RowExpanderGrid.Images;
@@ -74,8 +78,10 @@ public class HimnosView implements IsWidget  {
 	private int last_selected=0;
 	private static final int COLUMN_FORM_WIDTH = 1100;
 	private HtmlEditor htmleditor;
-	 
-	
+	private Himno grid_selected_himno; 
+	private HtmlEditor htmleditor_presentation;
+	private int n_es_mostrar;
+	private int indice;
 	public HimnosView(ArrayList<Himno> himnosgrid)
 	{
 		himnos=himnosgrid;
@@ -199,7 +205,7 @@ public class HimnosView implements IsWidget  {
 			htmleditor.setEnableLinks(false);
 			htmleditor.setEnableLists(false);
 			htmleditor.setEnableSourceEditMode(false);				
-			htmleditor.setValue("<textarea rows='34' cols='92' disabled align='center' style='text-align: center;color:#0B0B61;vertical-align: middle; display: block;margin-left: auto;margin-right: auto;font-weight: bold' >Seleccione un himno para ver la letra.</textarea>");								
+			htmleditor.setValue("<textarea rows='33' cols='92' disabled align='center' style='text-align: center;color:#0B0B61;vertical-align: middle; display: block;margin-left: auto;margin-right: auto;font-weight: bold' >Seleccione un himno para ver la letra.</textarea>");								
 		
 			final Grid<Himno> grid = new Grid<Himno>(store, cm);
 		      grid.getView().setAutoExpandColumn(nameCol);
@@ -211,8 +217,8 @@ public class HimnosView implements IsWidget  {
 				
 				@Override
 				public void onCellClick(CellClickEvent event) {
-					Himno selected_himno = grid.getStore().get(event.getRowIndex());	
-					PonerEnFormato(selected_himno.getLyrics());									
+					grid_selected_himno = grid.getStore().get(event.getRowIndex());	
+					PonerEnFormato(grid_selected_himno.getLyrics());									
 				}
 			});
 			
@@ -220,7 +226,90 @@ public class HimnosView implements IsWidget  {
 			hlcontainer = new HorizontalLayoutContainer();
 			hlcontainer.setBorders(false);		
 			hlcontainer.add(grid, new HorizontalLayoutData(-1, 1));
-			hlcontainer.add(htmleditor, new HorizontalLayoutData(1, 1));
+			
+			VerticalLayoutContainer vlcontainer=new VerticalLayoutContainer();
+			vlcontainer.add(htmleditor,new VerticalLayoutData(-1, 1));
+			vlcontainer.add(new TextButton("Ver en modo presentacion",new SelectHandler() {
+				
+				@Override
+				public void onSelect(SelectEvent event) {
+					if(grid_selected_himno!=null)
+					{
+						n_es_mostrar=0;
+						indice=n_es_mostrar+1;
+						LaunchFullScreen();
+						Info.display("Mensaje","Modo presentacion activo");		
+						final ScrollPanel con = (ScrollPanel) RootPanel.get("layout").getWidget(0);
+						RootPanel.get("layout").remove(0);
+						
+						ContentPanel cp=new ContentPanel();												
+						htmleditor_presentation= new HtmlEditor();			
+						htmleditor_presentation.setEnableAlignments(false);
+						htmleditor_presentation.setEnableColors(false);			
+						htmleditor_presentation.setEnableFont(false);
+						htmleditor_presentation.setEnableFontSize(false);
+						htmleditor_presentation.setEnableFormat(false);
+						htmleditor_presentation.setEnableLinks(false);
+						htmleditor_presentation.setEnableLists(false);
+						htmleditor_presentation.setEnableSourceEditMode(false);	
+												
+						final String[] estrofas= grid_selected_himno.getLyrics().split(">");						
+						htmleditor_presentation.setValue("<textarea rows='14' cols='50' disabled align='center' style='font-size: 30pt; text-align: center;color:#0B0B61;vertical-align: middle; display: block;margin-left: auto;margin-right: auto;font-weight: bold' >\n \n "+indice+" \n"+estrofas[n_es_mostrar].replaceAll("<", "\n")+"</textarea>");
+						cp.add(htmleditor_presentation);
+						//cp.setPixelSize(1365, 730);
+						cp.setPixelSize(Window.getClientWidth(), Window.getClientHeight()+50);					
+						TextButton sig_estrofa=new TextButton("SIG");
+						sig_estrofa.setIcon(Images.INSTANCE.sig_estrofa());
+						sig_estrofa.addSelectHandler(new SelectHandler() {
+							
+							@Override
+							public void onSelect(SelectEvent event) {							
+								if(n_es_mostrar<estrofas.length-1)
+								{
+									n_es_mostrar++;
+									indice=n_es_mostrar+1;
+									htmleditor_presentation.setValue("<textarea rows='14' cols='50' disabled align='center' style='font-size: 30pt; text-align: center;color:#0B0B61;vertical-align: middle; display: block;margin-left: auto;margin-right: auto;font-weight: bold' >\n \n "+ indice+" \n"+estrofas[n_es_mostrar].replaceAll("<", "\n")+"</textarea>");
+								}
+							}
+						});
+						TextButton ant_estrofa=new TextButton("ANT");
+						ant_estrofa.setIcon(Images.INSTANCE.ant_estrofa());
+						ant_estrofa.addSelectHandler(new SelectHandler() {
+							
+							@Override
+							public void onSelect(SelectEvent event) {
+								if(n_es_mostrar>0)
+								{
+									n_es_mostrar--;
+									indice=n_es_mostrar+1;
+									htmleditor_presentation.setValue("<textarea rows='14' cols='50' disabled align='center' style='font-size: 30pt; text-align: center;color:#0B0B61;vertical-align: middle; display: block;margin-left: auto;margin-right: auto;font-weight: bold' >\n \n "+ indice +" \n"+estrofas[n_es_mostrar].replaceAll("<", "\n")+"</textarea>");
+								}
+							}
+						});
+						TextButton salir_modo=new TextButton("SALIR");
+						salir_modo.setIcon(Images.INSTANCE.salir_modo());				
+						salir_modo.addSelectHandler(new SelectHandler() {
+							
+							@Override
+							public void onSelect(SelectEvent event) {							
+								RootPanel.get("layout").remove(0);
+								RootPanel.get("layout").add(con);
+								ExitFullScreen();								
+							}
+						});
+						
+						cp.addButton(ant_estrofa);
+						cp.addButton(sig_estrofa);						
+						cp.addButton(salir_modo);									
+						RootPanel.get("layout").add(cp);																													
+					}
+					else
+					{
+						Info.display("Mensaje","Debe seleccionar un himno para poder ver en modo presentacion!");
+					}
+				}
+			}), new VerticalLayoutData(1, -1));
+			hlcontainer.add(vlcontainer, new HorizontalLayoutData(1, 1));
 			
 			
 			
@@ -253,6 +342,27 @@ public class HimnosView implements IsWidget  {
 		return panel;
 	}
 	
+	public static native void LaunchFullScreen() /*-{		
+		var element=$doc.documentElement; 
+		if (element.requestFullScreen) {
+		    element.requestFullScreen();
+		  } else if(element.mozRequestFullScreen) {
+		    element.mozRequestFullScreen();
+		  } else if(element.webkitRequestFullScreen) {
+		    element.webkitRequestFullScreen();
+		  }
+	}-*/;
+
+	public static native void ExitFullScreen() /*-{		
+	var element=$doc;
+	   if (element.exitFullScreen) {
+	    element.exitFullScreen();
+	  } else if(element.mozCancelFullScreen) {
+	    element.mozCancelFullScreen();
+	  } else if(element.webkitCancelFullScreen) {
+	    element.webkitCancelFullScreen();
+	  }
+	}-*/;
 	
 	protected void ChangeViewEdition(Himno p) {
 		panel.setHeadingText("Editar himno");   
@@ -409,7 +519,7 @@ public class HimnosView implements IsWidget  {
 	  }-*/;	 
 
 	protected void PonerEnFormato(String lyrics) {		
-		String formateado="<textarea rows='34' cols='92' disabled align='center' style='text-align: center;color:#0B0B61;vertical-align: middle; display: block;margin-left: auto;margin-right: auto;font-weight: bold' > \n";
+		String formateado="<textarea rows='33' cols='92' disabled align='center' style='text-align: center;color:#0B0B61;vertical-align: middle; display: block;margin-left: auto;margin-right: auto;font-weight: bold' > \n";
 		String[] estrofas=lyrics.split(">");
 		for (int i = 0; i < estrofas.length; i++) {
 			int n=i+1;
@@ -441,6 +551,15 @@ public class HimnosView implements IsWidget  {
 		  
 		  @Source("himnos.png")
 		  ImageResource himnos();
+		  
+		  @Source("ant_estrofa.png")
+		  ImageResource ant_estrofa();
+		  
+		  @Source("sig_estrofa.png")
+		  ImageResource sig_estrofa();
+		  
+		  @Source("sali_modo.png")
+		  ImageResource salir_modo();
 		}	
 	
 	protected void Remover(int id) {		

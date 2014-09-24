@@ -176,8 +176,7 @@ public class UploadHimnoForm implements IsWidget {
 									estrofa.setText("");
 									estrofas.clear();
 									Info.display("Mensaje",result);
-									//Window.alert(result);
-									Name.setText(result);
+									//Window.alert(result);									
 								}
 								
 								@Override
