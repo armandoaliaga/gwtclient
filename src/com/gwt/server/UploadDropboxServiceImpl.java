@@ -109,9 +109,45 @@ public class UploadDropboxServiceImpl extends RemoteServiceServlet implements Up
     	surl=surl.substring(0,surl.length()-1)+"1";
     	*/        
         fname=fname.replaceAll(" ", "%20");
-    	String resp=SendSpShareableUrl(id,fname);
+        String resp;
+        if(HoS=="S")
+        	resp =SendSpShareableUrl(id,fname);
+        else
+        	resp =SendSpShareableUrlHimno(id,fname);
      
-        return "siii XD";
+        return resp;
+	}
+
+	private String SendSpShareableUrlHimno(String id, String filename) {
+
+		HttpClient httpclient = new DefaultHttpClient();		
+	    String complementoURL = url+"/himnos/seturlHimno/"+id+"/"+filename;
+		JSONArray jsonArray = null;
+		HttpGet httppost = new HttpGet(complementoURL);
+		try 
+		{
+			HttpResponse response = httpclient.execute(httppost);
+			String jsonResult = inputStreamToString(
+					response.getEntity().getContent()).toString();
+
+			jsonArray = new JSONArray(jsonResult);		
+		} 
+		catch (ClientProtocolException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (JSONException e) 
+		{
+			e.printStackTrace();
+		}
+		if(jsonArray.length()!=0)
+			return "Audio del Himno ya disponible";
+		else
+			return "Error! al subir el audio del archivo";
 	}
 
 	private String SendSpShareableUrl(String id,String filename) {

@@ -164,7 +164,7 @@ public class RowExpanderGrid implements IsWidget {
 	          Context c = event.getContext();
 	          int row = c.getIndex();
 	          Sermon p = store.get(row);	
-	          if(lastIdPlayed!=p.getId())
+	          if(lastIdPlayed!=p.getId() || audioReproductor.hasEnded())
 	          	audioReproductor.setSrc(p.getShareableURL());	          
 	          audioReproductor.play();
 	          lastIdPlayed=p.getId();

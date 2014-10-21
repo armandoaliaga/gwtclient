@@ -93,7 +93,7 @@ public class UploadSermonForm implements IsWidget {
 	    	    
 	    final MultiUploader defaultUploader = new MultiUploader();
 	    defaultUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
-	    con.add(new FieldLabel(defaultUploader, "File"), new HtmlData(".file"));
+	    con.add(new FieldLabel(defaultUploader, "MP3 file"), new HtmlData(".file"));
 	    
 	    /*final FileUploadField file = new FileUploadField();	 
 	    file.setWidth(cw);

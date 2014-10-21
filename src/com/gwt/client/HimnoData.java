@@ -9,4 +9,5 @@ public class HimnoData extends JavaScriptObject{
 	  public final native int getNumber() /*-{ return this.number; }-*/; 
 	  public final native String getName() /*-{ return this.name; }-*/;
 	  public final native String getLyrics() /*-{ return this.lyrics; }-*/;	
+	  public final native String getShareableUrl() /*-{ return this.shareableURL; }-*/;
 }

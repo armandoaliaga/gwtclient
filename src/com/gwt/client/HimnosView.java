@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.media.client.Audio;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ClientBundle.Source;
@@ -82,37 +83,44 @@ public class HimnosView implements IsWidget  {
 	private HtmlEditor htmleditor_presentation;
 	private int n_es_mostrar;
 	private int indice;
+	private Audio audioReproductor;
+	{
+		audioReproductor = Audio.createIfSupported();	    	   
+	}
 	public HimnosView(ArrayList<Himno> himnosgrid)
 	{
 		himnos=himnosgrid;
 	}
-	
+    public static native void DownloadAudio(String src) /*-{						  		 
+	 $wnd.location.href = src;
+	}-*/;
 	@Override
 	public Widget asWidget() {
 		if (panel == null) {
 			
 			ColumnConfig<Himno, Integer> numbercol = new ColumnConfig<Himno, Integer>(props.number(), 50, "Numero"); 
 			ColumnConfig<Himno, String> nameCol = new ColumnConfig<Himno, String>(props.name(), 250, "Titulo");
-			ColumnConfig<Himno, String> playcolumn = new ColumnConfig<Himno, String>(props.aux(), 40, "");
+			ColumnConfig<Himno, String> downloadcolumn = new ColumnConfig<Himno, String>(props.aux(), 40, "");
 		    ColumnConfig<Himno, String> editcolumn = new ColumnConfig<Himno, String>(props.aux(), 40, "");
 		    ColumnConfig<Himno, String> deletecolumn = new ColumnConfig<Himno, String>(props.aux(), 40, "");	
 			
 		    
-		    //Button Play
-		      final TextButtonCell buttonPlay = new TextButtonCell();
-		      buttonPlay.setIconAlign(IconAlign.LEFT);
-		      buttonPlay.setIcon(Images.INSTANCE.play());
-		      buttonPlay.addSelectHandler(new SelectHandler() {
+		    //Button Download
+		      final TextButtonCell buttonDownload = new TextButtonCell();
+		      buttonDownload.setIconAlign(IconAlign.LEFT);
+		      buttonDownload.setIcon(Images.INSTANCE.download());
+		      buttonDownload.addSelectHandler(new SelectHandler() {
 		 
 		        @Override
 		        public void onSelect(SelectEvent event) {
 		          Context c = event.getContext();
 		          int row = c.getIndex();
-		          Himno p = store.get(row);	          
-		          Info.display("Event Play", "The " + p.getId() + " was clicked.");	      		          
+		          Himno p = store.get(row);	   
+		          DownloadAudio(p.getShareableURL());
+		          Info.display("Mensaje", "Iniciando descarga del himno: '"+p.getName()+"'");	      		          
 		        }
 		      });
-		      playcolumn.setCell(buttonPlay);
+		      downloadcolumn.setCell(buttonDownload);
 		      
 		      //Button Edit
 		      TextButtonCell buttonEdit = new TextButtonCell();
@@ -177,7 +185,7 @@ public class HimnosView implements IsWidget  {
 			List<ColumnConfig<Himno, ?>> l = new ArrayList<ColumnConfig<Himno, ?>>();
 		    l.add(numbercol);
 		    l.add(nameCol);
-		    l.add(playcolumn);
+		    l.add(downloadcolumn);
 		    l.add(editcolumn);
 		    l.add(deletecolumn); 
 		    ColumnModel<Himno> cm = new ColumnModel<Himno>(l);
@@ -235,6 +243,7 @@ public class HimnosView implements IsWidget  {
 				public void onSelect(SelectEvent event) {
 					if(grid_selected_himno!=null)
 					{
+						audioReproductor.setSrc(grid_selected_himno.getShareableURL());
 						n_es_mostrar=0;
 						indice=n_es_mostrar+1;
 						LaunchFullScreen();
@@ -291,13 +300,36 @@ public class HimnosView implements IsWidget  {
 						salir_modo.addSelectHandler(new SelectHandler() {
 							
 							@Override
-							public void onSelect(SelectEvent event) {							
+							public void onSelect(SelectEvent event) {	
+								audioReproductor.setSrc(null);
 								RootPanel.get("layout").remove(0);
 								RootPanel.get("layout").add(con);
 								ExitFullScreen();								
 							}
 						});
 						
+						TextButton audio_play=new TextButton("Play");
+						audio_play.setIcon(Images.INSTANCE.play());				
+						audio_play.addSelectHandler(new SelectHandler() {
+							
+							@Override
+							public void onSelect(SelectEvent event) {							
+								audioReproductor.play();						
+							}
+						});
+						
+						TextButton audio_pause=new TextButton("Pause");
+						audio_pause.setIcon(Images.INSTANCE.pause());				
+						audio_pause.addSelectHandler(new SelectHandler() {
+							
+							@Override
+							public void onSelect(SelectEvent event) {							
+								audioReproductor.pause();						
+							}
+						});
+						
+						cp.addButton(audio_play);
+						cp.addButton(audio_pause);
 						cp.addButton(ant_estrofa);
 						cp.addButton(sig_estrofa);						
 						cp.addButton(salir_modo);									
@@ -542,7 +574,7 @@ public class HimnosView implements IsWidget  {
 	public interface Images extends ClientBundle {
 		public Images INSTANCE = GWT.create(Images.class);
 		  
-		  @Source("Play.png")
+		  @Source("playmp.png")
 		  ImageResource play();
 		  
 		  @Source("Edit.png")
@@ -562,6 +594,12 @@ public class HimnosView implements IsWidget  {
 		  
 		  @Source("sali_modo.png")
 		  ImageResource salir_modo();
+		  
+		  @Source("Download.png")
+		  ImageResource download();
+		  
+		  @Source("pausemp.png")
+		  ImageResource pause();
 		}	
 	
 	protected void Remover(int id) {		

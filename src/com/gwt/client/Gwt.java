@@ -236,7 +236,7 @@ public class Gwt implements IsWidget, EntryPoint {
     		        	  JsArray<HimnoData> himnos= JsonUtils.safeEval(response.getText());		    		        	  		    		        	 		    		        	   		 		
     		  		    
     		        	  for (int i = 0; i < himnos.length(); i++) {		    		        		  
-    		        		  Himno nhimno=new Himno(himnos.get(i).getId(),himnos.get(i).getNumber(), himnos.get(i).getName(), himnos.get(i).getLyrics());    		        		  
+    		        		  Himno nhimno=new Himno(himnos.get(i).getId(),himnos.get(i).getNumber(), himnos.get(i).getName(), himnos.get(i).getLyrics(), himnos.get(i).getShareableUrl());    		        		  
     		        		  himnosgrid.add(nhimno);		    		        		  
     		        	    }    		        	  
     		        	  HimnosView himnosview= new HimnosView(himnosgrid);

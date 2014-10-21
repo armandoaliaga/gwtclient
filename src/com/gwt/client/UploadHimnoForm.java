@@ -1,6 +1,11 @@
 package com.gwt.client;
 
 
+import gwtupload.client.IUploader;
+import gwtupload.client.MultiUploader;
+import gwtupload.client.IUploadStatus.Status;
+import gwtupload.client.IUploader.UploadedInfo;
+
 import java.awt.Panel;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +38,7 @@ import com.sencha.gxt.widget.core.client.info.Info;
 
 public class UploadHimnoForm implements IsWidget {
 	final SubmitHimnoServiceAsync submithimno= GWT.create(SubmitHimnoService.class);
+    final UploadDropboxServiceAsync dropboxservice= GWT.create(UploadDropboxService.class);
 	private ContentPanel panel;
 	private CenterLayoutContainer clc;
 	
@@ -45,6 +51,11 @@ public class UploadHimnoForm implements IsWidget {
 	private int n_estrofas;
 	private ArrayList<String> estrofas;
 	private int n;
+	
+	private String path="";
+	private String namefile="";
+	private Boolean archivocargado=false;
+	
 	@Override
 	public Widget asWidget() {
 			
@@ -103,8 +114,11 @@ public class UploadHimnoForm implements IsWidget {
 	    Name.setWidth(cw);
 	    con.add(new FieldLabel(Name, "Nombre"), new HtmlData(".name"));
 	 	 	  
+	    final MultiUploader defaultUploader = new MultiUploader();
+	    defaultUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
+	    con.add(new FieldLabel(defaultUploader, "MP3 file"), new HtmlData(".file"));
 	    
-	    final FileUploadField file = new FileUploadField();		   
+	    /*final FileUploadField file = new FileUploadField();		   
 	    file.setWidth(cw);
 	    con.add(new FieldLabel(file, "File"), new HtmlData(".file"));
 	
@@ -115,7 +129,7 @@ public class UploadHimnoForm implements IsWidget {
 	          Info.display("File Changed", "You selected " + file.getValue());
 	        }
 	      });
-	    file.setName("uploadedfile");
+	    file.setName("uploadedfile");*/
 	    //file.setAllowBlank(false);
 	 	   
 	   
@@ -130,8 +144,7 @@ public class UploadHimnoForm implements IsWidget {
 			@Override
 			public void onSelect(SelectEvent event) {			
 				numero.disable();
-				Name.disable();
-				file.disable();
+				Name.disable();			
 				numeroEstrofas.setEnabled(false);
 				vp3.add(clc);		
 				n_estrofas=Integer.parseInt(numeroEstrofas.getValue(numeroEstrofas.getSelectedIndex()));
@@ -160,30 +173,49 @@ public class UploadHimnoForm implements IsWidget {
 						}
 						else
 						{
-							estrofas.add(estrofa.getText());
-							submithimno.SubmitService(numero.getText(), Name.getText(), estrofas, new AsyncCallback<String>() {
-								
-								@Override
-								public void onSuccess(String result) {
-									estrofas.clear();
-									vp3.remove(1);
-									numero.enable();
-									Name.enable();
-									file.enable();									
-									numeroEstrofas.setEnabled(true);
-									numero.setText("");
-									Name.setText("");									
-									estrofa.setText("");
-									estrofas.clear();
-									Info.display("Mensaje",result);
-									//Window.alert(result);									
-								}
-								
-								@Override
-								public void onFailure(Throwable caught) {	
-									Window.alert(caught+"");
-								}
-							});						
+							if(archivocargado)
+							{	
+								estrofas.add(estrofa.getText());
+								submithimno.SubmitService(numero.getText(), Name.getText(), estrofas, new AsyncCallback<String>() {
+									
+									@Override
+									public void onSuccess(String result) {
+										estrofas.clear();
+										vp3.remove(1);
+										numero.enable();
+										Name.enable();															
+										numeroEstrofas.setEnabled(true);
+										numero.setText("");
+										Name.setText("");									
+										estrofa.setText("");
+										estrofas.clear();
+										Info.display("Mensaje","Himno guardado con exito");
+										dropboxservice.SubmitService(result, path, namefile, "H", new AsyncCallback<String>() {
+											
+											@Override
+											public void onSuccess(String result) {
+												Window.alert(result);
+											}
+											
+											@Override
+											public void onFailure(Throwable caught) {
+												// TODO Auto-generated method stub
+												
+											}
+										 });
+									
+									}
+									
+									@Override
+									public void onFailure(Throwable caught) {	
+										Window.alert(caught+"");
+									}
+								});	
+						     }
+							 else
+							 {
+								 Info.display("Mensaje"," Por favor, seleccione un archivo o aguarde a que termine el proceso de carga."); 
+							 }
 						}
 					}
 				});												
@@ -205,6 +237,27 @@ public class UploadHimnoForm implements IsWidget {
 	        '<tr><td class=numero width=50%></td><td class=name width=50%></td></tr>',
 	        '<tr><td class=file width=50%></td></tr><tr><td class=ne width=50%></td></tr>','</table>'	 
 	    ].join("");
-	  }-*/;	 	  	 
+	  }-*/;	 	 
+	  
+	  
+	  private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
+	    public void onFinish(IUploader uploader) {
+	      if (uploader.getStatus() == Status.SUCCESS) {	       
+	        
+	        // The server sends useful information to the client by default
+	        UploadedInfo info = uploader.getServerInfo();
+	        System.out.println("File name " + info.name);
+	        System.out.println("File content-type " + info.ctype);
+	        System.out.println("File size " + info.size);
+
+	        // You can send any customized message and parse it 
+	        System.out.println("Server message " + info.message);
+	        
+	        path=info.message;
+	        namefile=info.name;
+	        archivocargado=true;	        
+	      }
+	    }
+	  };
 	  	  
 }

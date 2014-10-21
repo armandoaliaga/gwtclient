@@ -6,20 +6,16 @@ public class Himno {
 	 private String name;
 	 private String lyrics;
 	 private String aux="";
+	 private String shareableURL;
 	 
-	public Himno(int id, int number, String name, String lyrics) {
+	public Himno(int id, int number, String name, String lyrics,String shareableurl) {
 		super();
 		this.id = id;
 		this.number = number;
 		this.name = name;
 		this.lyrics = lyrics;
-	}
-	public Himno(int number, String name, String lyrics) {
-		super();
-		this.number = number;
-		this.name = name;
-		this.lyrics = lyrics;
-	}
+		this.shareableURL=shareableurl;
+	}	
 	public int getNumber() {
 		return number;
 	}
@@ -49,5 +45,12 @@ public class Himno {
 	}
 	public void setAux(String aux) {
 		this.aux = aux;
+	}
+	public String getShareableURL() {
+		return shareableURL;
+	}
+	public void setShareableURL(String shareableURL) {
+		this.shareableURL = shareableURL;
 	}		
+	
 }

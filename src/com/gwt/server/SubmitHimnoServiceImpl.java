@@ -15,6 +15,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.gwt.client.SubmitHimnoService;
@@ -58,9 +59,15 @@ public class SubmitHimnoServiceImpl extends RemoteServiceServlet implements Subm
 			e.printStackTrace();
 		}
 		if(jsonArray.length()!=0)
-			return "Himno guardado con exito!";
-		else
-			return "Error! al guardar el himno";
+		{			
+			try {
+				JSONObject a = jsonArray.getJSONObject(0);
+				return a.getString("id");	
+			} catch (JSONException e) {			
+				e.printStackTrace();
+			}			
+		}		
+		return "Error! al guardar el sermon";
 	}
 	private StringBuilder inputStreamToString(InputStream is) {
 		String rLine = "";
