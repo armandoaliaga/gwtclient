@@ -10,10 +10,11 @@ public class Sermon {
 	 private int duration;
 	 private String date;
 	 private String play="";
+	 private String shareableURL;
 	 
-	 
-	 
-	public Sermon(int id, String name, String name_of_predicador,String description, String serie, int duration, String date) {
+
+
+	public Sermon(int id, String name, String name_of_predicador,String description, String serie, int duration, String date,String shareableurl) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -22,6 +23,7 @@ public class Sermon {
 		this.serie = serie;
 		this.duration = duration;
 		this.date = date;
+		this.shareableURL=shareableurl;
 	}
 	
 	public int getId() {
@@ -73,5 +75,13 @@ public class Sermon {
 
 	public void setDate(String date) {
 		this.date = date;
-	}	 
+	}	 	 
+	 
+	public String getShareableURL() {
+		return shareableURL;
+	}
+
+	public void setShareableURL(String shareableURL) {
+		this.shareableURL = shareableURL;
+	}
 }

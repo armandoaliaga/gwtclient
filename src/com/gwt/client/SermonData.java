@@ -12,4 +12,5 @@ public class SermonData  extends JavaScriptObject {
 	  public final native String getSerie() /*-{ return this.serie; }-*/;
 	  public final native int getDurationSeg() /*-{ return this.durationseg; }-*/;	
 	  public final native String getFecha() /*-{ return this.fecha; }-*/;
+	  public final native String getShareableUrl() /*-{ return this.shareableURL; }-*/;
 }

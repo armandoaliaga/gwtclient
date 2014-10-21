@@ -151,7 +151,7 @@ public class Gwt implements IsWidget, EntryPoint {
 		    		        	  JsArray<SermonData> sermones= JsonUtils.safeEval(response.getText());		    		        	  		    		        	 		    		        	   		 		
 		    		  		    
 		    		        	  for (int i = 0; i < sermones.length(); i++) {		    		        		 
-		    		        		  Sermon nsermon =new Sermon(sermones.get(i).getId(), sermones.get(i).getName(), sermones.get(i).getName_of_predicador(), sermones.get(i).getDescripcion(), sermones.get(i).getSerie(), sermones.get(i).getDurationSeg(),  sermones.get(i).getFecha());
+		    		        		  Sermon nsermon =new Sermon(sermones.get(i).getId(), sermones.get(i).getName(), sermones.get(i).getName_of_predicador(), sermones.get(i).getDescripcion(), sermones.get(i).getSerie(), sermones.get(i).getDurationSeg(),  sermones.get(i).getFecha(), sermones.get(i).getShareableUrl());
 		    		        		  sermonesgrid.add(nsermon);		    		        		  
 		    		        	    }
 		    		        	  RowExpanderGrid a=new RowExpanderGrid(sermonesgrid);

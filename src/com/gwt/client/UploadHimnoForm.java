@@ -104,7 +104,7 @@ public class UploadHimnoForm implements IsWidget {
 	    con.add(new FieldLabel(Name, "Nombre"), new HtmlData(".name"));
 	 	 	  
 	    
-	    final FileUploadField file = new FileUploadField();	 
+	    final FileUploadField file = new FileUploadField();		   
 	    file.setWidth(cw);
 	    con.add(new FieldLabel(file, "File"), new HtmlData(".file"));
 	

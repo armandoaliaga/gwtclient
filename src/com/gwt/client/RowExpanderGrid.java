@@ -11,6 +11,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.i18n.rebind.MessageFormatParser.StaticArgChunk;
+import com.google.gwt.media.client.Audio;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -62,11 +64,20 @@ public class RowExpanderGrid implements IsWidget {
 	  private static final int COLUMN_FORM_WIDTH = 1100;
 	  private VerticalPanel vp;
 	  private VerticalLayoutContainer conn;
+	  private int lastIdPlayed=0;
 	  final UpdateSermonServiceAsync updateservice=GWT.create(UpdateSermonService.class);
+	  private Audio audioReproductor;
+	  {
+		  audioReproductor = Audio.createIfSupported();	    	   
+	  }
 	  public RowExpanderGrid(ArrayList<Sermon> sermonesgrid)
 	  {
 		  sermones=sermonesgrid;
-	  }
+	  }	  
+	  
+	  public static native void DownloadAudio(String src) /*-{						  		 
+		 $wnd.location.href = src;
+		}-*/;
 	  
 	  @Override
 	  public Widget asWidget() {
@@ -75,7 +86,7 @@ public class RowExpanderGrid implements IsWidget {
 	      RowExpander<Sermon> expander = new RowExpander<Sermon>(new AbstractCell<Sermon>() {
 	        @Override
 	        public void render(Context context, Sermon value, SafeHtmlBuilder sb) {
-	          sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Descripcion:</b> " + value.getDescription());	                   	        
+	          sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Descripcion:</b> " + value.getDescription());	          
 	        }
 	      });	 	     			      	      
 	      
@@ -97,11 +108,51 @@ public class RowExpanderGrid implements IsWidget {
 	      ColumnConfig<Sermon, String> lastTransCol = new ColumnConfig<Sermon, String>(props.date(), 130, "Fecha (yyyy-mm-dd)");
 	      ColumnConfig<Sermon, String> playcolumn = new ColumnConfig<Sermon, String>(props.play(), 40, "");
 	      ColumnConfig<Sermon, String> editcolumn = new ColumnConfig<Sermon, String>(props.play(), 40, "");
-	      ColumnConfig<Sermon, String> deletecolumn = new ColumnConfig<Sermon, String>(props.play(), 40, "");	     
+	      ColumnConfig<Sermon, String> deletecolumn = new ColumnConfig<Sermon, String>(props.play(), 40, "");
+	      ColumnConfig<Sermon, String> downloadcolumn = new ColumnConfig<Sermon, String>(props.play(), 40, "");
+	      ColumnConfig<Sermon, String> pausecolumn = new ColumnConfig<Sermon, String>(props.play(), 40, "");
 	      /*ColumnConfig<Sermon, Date> lastTransCol = new ColumnConfig<Sermon, Date>(props.date(), 121, "Fecha (yyyy-mm-dd)");
 	      lastTransCol.setCell(new DateCell(DateTimeFormat.getFormat("MM/dd/yyyy")));*/
 	 
 	      
+	      //Button Download
+	      final TextButtonCell buttonDownload = new TextButtonCell();
+	      buttonDownload.setIconAlign(IconAlign.LEFT);
+	      buttonDownload.setIcon(Images.INSTANCE.download());
+	      buttonDownload.addSelectHandler(new SelectHandler() {
+	 
+	        @Override
+	        public void onSelect(SelectEvent event) {
+	          Context c = event.getContext();
+	          int row = c.getIndex();
+	          Sermon p = store.get(row);	
+	          DownloadAudio(p.getShareableURL());
+	          Info.display("Mensaje","Iniciando descarga de audio del sermon '"+p.getName()+"'");		          
+	        }
+	      });
+	      downloadcolumn.setCell(buttonDownload);
+	      
+	      //Button Pause
+	      final TextButtonCell buttonPause = new TextButtonCell();
+	      buttonPause.setIconAlign(IconAlign.LEFT);
+	      buttonPause.setIcon(Images.INSTANCE.pause());
+	      buttonPause.addSelectHandler(new SelectHandler() {
+	 
+	        @Override
+	        public void onSelect(SelectEvent event) {
+	          Context c = event.getContext();
+	          int row = c.getIndex();
+	          Sermon p = store.get(row);	
+	          if(lastIdPlayed!=0)
+	          {
+	        	  if(p.getId()==lastIdPlayed)
+	        		  audioReproductor.pause();
+	          }
+	        }
+	      });
+	      pausecolumn.setCell(buttonPause);
+	      
+	 
 	      //Button Play
 	      final TextButtonCell buttonPlay = new TextButtonCell();
 	      buttonPlay.setIconAlign(IconAlign.LEFT);
@@ -112,8 +163,12 @@ public class RowExpanderGrid implements IsWidget {
 	        public void onSelect(SelectEvent event) {
 	          Context c = event.getContext();
 	          int row = c.getIndex();
-	          Sermon p = store.get(row);	          
-	          Info.display("Event Play", "The " + p.getId() + " was clicked.");	          	          
+	          Sermon p = store.get(row);	
+	          if(lastIdPlayed!=p.getId())
+	          	audioReproductor.setSrc(p.getShareableURL());	          
+	          audioReproductor.play();
+	          lastIdPlayed=p.getId();
+	          Info.display("Mensaje", "'"+p.getName()+"' esta siendo reproducida.");		        
 	        }
 	      });
 	      playcolumn.setCell(buttonPlay);
@@ -187,6 +242,8 @@ public class RowExpanderGrid implements IsWidget {
 	      l.add(changeCol);
 	      l.add(lastTransCol);
 	      l.add(playcolumn);
+	      l.add(pausecolumn);
+	      l.add(downloadcolumn);
 	      l.add(editcolumn);
 	      l.add(deletecolumn);
 	      ColumnModel<Sermon> cm = new ColumnModel<Sermon>(l);
@@ -270,6 +327,12 @@ public class RowExpanderGrid implements IsWidget {
 		  
 		  @Source("Delete.png")
 		  ImageResource delete();
+		  
+		  @Source("Download.png")
+		  ImageResource download();
+		  
+		  @Source("Pause.png")
+		  ImageResource pause();
 		}	
 
 	 private void createColumnForm(final int id, String name, String name_predicador, String descripcion, String seriee, int duracion, String date) {

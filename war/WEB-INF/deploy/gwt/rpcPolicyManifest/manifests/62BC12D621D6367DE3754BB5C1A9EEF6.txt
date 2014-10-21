@@ -1,0 +1,2 @@
+serviceClass: com.gwt.client.UploadDropboxService
+path: 86B5A02D9DE2114DEB29AE8BD5A30D9E.gwt.rpc

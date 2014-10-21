@@ -15,6 +15,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.gwt.client.SubmitSermonService;
@@ -54,9 +55,15 @@ public class SubmitSermonServiceImpl extends RemoteServiceServlet implements Sub
 			e.printStackTrace();
 		}
 		if(jsonArray.length()!=0)
-			return "Sermon guardado con exito!";
-		else
-			return "Error! al guardar el sermon";
+		{			
+			try {
+				JSONObject a = jsonArray.getJSONObject(0);
+				return a.getString("id");	
+			} catch (JSONException e) {			
+				e.printStackTrace();
+			}			
+		}		
+		return "Error! al guardar el sermon";
 	}
 	private StringBuilder inputStreamToString(InputStream is) {
 		String rLine = "";

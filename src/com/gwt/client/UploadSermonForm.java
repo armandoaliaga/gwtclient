@@ -1,4 +1,14 @@
 package com.gwt.client;
+import gwtupload.client.IUploadStatus.Status;
+import gwtupload.client.IUploader;
+import gwtupload.client.IUploader.UploadedInfo;
+import gwtupload.client.MultiUploader;
+import gwtupload.client.PreloadedImage;
+import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
+
+
+
+
 import java.nio.file.attribute.FileAttribute;
 import java.util.List;
 
@@ -34,9 +44,12 @@ import com.sencha.gxt.widget.core.client.info.Info;
 public class UploadSermonForm implements IsWidget {
 	 
       final SubmitSermonServiceAsync submitservice= GWT.create(SubmitSermonService.class);
+      final UploadDropboxServiceAsync dropboxservice= GWT.create(UploadDropboxService.class);
 	  private static final int COLUMN_FORM_WIDTH = 1100;
 	  private VerticalPanel vp;
-	 
+	  private String path="";
+	  private String namefile="";
+	  private Boolean archivocargado=false;
 	  public Widget asWidget() {
 	    if (vp == null) {
 	      vp = new VerticalPanel();
@@ -77,8 +90,12 @@ public class UploadSermonForm implements IsWidget {
 	    final HtmlEditor a = new HtmlEditor();	   
 	    a.setWidth(COLUMN_FORM_WIDTH - 25 - 30);
 	    con.add(new FieldLabel(a, "Descripcccion"), new HtmlData(".editor"));
+	    	    
+	    final MultiUploader defaultUploader = new MultiUploader();
+	    defaultUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
+	    con.add(new FieldLabel(defaultUploader, "File"), new HtmlData(".file"));
 	    
-	    final FileUploadField file = new FileUploadField();	 
+	    /*final FileUploadField file = new FileUploadField();	 
 	    file.setWidth(cw);
 	    con.add(new FieldLabel(file, "File"), new HtmlData(".file"));
 	
@@ -91,7 +108,7 @@ public class UploadSermonForm implements IsWidget {
 	      });
 	    file.setName("uploadedfile");
 	    file.setAllowBlank(false);
-	 	   
+	 	*/   
 	    panel.addButton(new TextButton("Cancel",new SelectHandler() {
 			
 			@Override
@@ -104,36 +121,57 @@ public class UploadSermonForm implements IsWidget {
 			
 			@Override
 			public void onSelect(SelectEvent event) {
-			  final AutoProgressMessageBox box = new AutoProgressMessageBox("En progreso", "Guardando sermon, por favor espere...");
-  	          box.setProgressText("Guardando...");
-  	          box.auto();		    	         
-  	          box.show();
-				submitservice.SubmitService(Name.getText(), Name_of_predicador.getText(), serie.getText(), a.getValue(),Date.getCurrentValue(), new AsyncCallback<String>() {
-					
-					@Override
-					public void onSuccess(String result) {
-						 
-							Name.setText("");
-							Name_of_predicador.setText("");
-							serie.setText("");
-							a.setValue("");
-							Date.setText("");
-		    	          Timer t = new Timer() {
-		    	            @Override
-		    	            public void run() {		    	            	
-		    	              Info.display("Mensaje", "Sermon guardado con exito!");
-		    	              box.hide();
-		    	            }
-		    	          };
-		    	          t.schedule(3000);
-					}
-					
-					@Override
-					public void onFailure(Throwable caught) {
-						 Info.display("Mensaje", "Error al guardar el sermon!");
-						 box.hide();
-					}
-				});		
+			  if(archivocargado)
+			  {				 			  			 
+				  final AutoProgressMessageBox box = new AutoProgressMessageBox("En progreso", "Guardando sermon, por favor espere...");
+	  	          box.setProgressText("Guardando...");
+	  	          box.auto();		    	         
+	  	          box.show();
+					submitservice.SubmitService(Name.getText(), Name_of_predicador.getText(), serie.getText(), a.getValue(),Date.getCurrentValue(), new AsyncCallback<String>() {
+						
+						@Override
+						public void onSuccess(String result) {
+							 
+								Name.setText("");
+								Name_of_predicador.setText("");
+								serie.setText("");
+								a.setValue("");
+								Date.setText("");
+			    	          Timer t = new Timer() {
+			    	            @Override
+			    	            public void run() {		    	            	
+			    	              Info.display("Mensaje", "Sermon guardado con exito!");
+			    	              box.hide();
+			    	            }
+			    	          };
+			    	          t.schedule(3000);
+			    	          
+			    	          dropboxservice.SubmitService(result, path, namefile, "S", new AsyncCallback<String>() {
+								
+								@Override
+								public void onSuccess(String result) {
+									Window.alert(result);
+								}
+								
+								@Override
+								public void onFailure(Throwable caught) {
+									// TODO Auto-generated method stub
+									
+								}
+							});
+						}
+						
+						@Override
+						public void onFailure(Throwable caught) {
+							 Info.display("Mensaje", "Error al guardar el sermon!");
+							 box.hide();
+						}
+					});		
+				}
+			  else
+			  {
+				 Info.display("Mensaje"," Por favor, seleccione un archivo o aguarde a que termine el proceso de carga."); 
+			  }
 			}
 		}));	    	    	 
 		
@@ -156,4 +194,23 @@ public class UploadSermonForm implements IsWidget {
 	    ].join("");
 	  }-*/;	 	
 	  
+	  private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
+	    public void onFinish(IUploader uploader) {
+	      if (uploader.getStatus() == Status.SUCCESS) {	       
+	        
+	        // The server sends useful information to the client by default
+	        UploadedInfo info = uploader.getServerInfo();
+	        System.out.println("File name " + info.name);
+	        System.out.println("File content-type " + info.ctype);
+	        System.out.println("File size " + info.size);
+
+	        // You can send any customized message and parse it 
+	        System.out.println("Server message " + info.message);
+	        
+	        path=info.message;
+	        namefile=info.name;
+	        archivocargado=true;	        
+	      }
+	    }
+	  };		  	 
 }

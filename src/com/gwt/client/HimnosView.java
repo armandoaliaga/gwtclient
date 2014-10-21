@@ -227,9 +227,9 @@ public class HimnosView implements IsWidget  {
 			hlcontainer.setBorders(false);		
 			hlcontainer.add(grid, new HorizontalLayoutData(-1, 1));
 			
-			VerticalLayoutContainer vlcontainer=new VerticalLayoutContainer();
-			vlcontainer.add(htmleditor,new VerticalLayoutData(-1, 1));
-			vlcontainer.add(new TextButton("Ver en modo presentacion",new SelectHandler() {
+			VerticalLayoutContainer vlcontainermp =new VerticalLayoutContainer();
+			vlcontainermp.add(htmleditor,new VerticalLayoutData(-1, 1));
+			vlcontainermp.add(new TextButton("Ver en modo presentacion",new SelectHandler() {
 				
 				@Override
 				public void onSelect(SelectEvent event) {
@@ -309,7 +309,7 @@ public class HimnosView implements IsWidget  {
 					}
 				}
 			}), new VerticalLayoutData(1, -1));
-			hlcontainer.add(vlcontainer, new HorizontalLayoutData(1, 1));
+			hlcontainer.add(vlcontainermp, new HorizontalLayoutData(1, 1));
 			
 			
 			
@@ -448,8 +448,9 @@ public class HimnosView implements IsWidget  {
 		    fpanel.addButton(new TextButton("Cancelar",new SelectHandler() {
 				
 				@Override
-				public void onSelect(SelectEvent event) {				  
-					panel.setWidget(vlcontainer);
+				public void onSelect(SelectEvent event) {
+					panel.setHeadingText("Himnos");
+					panel.setWidget(vlcontainer);						
 				}
 			}));
 		    
@@ -491,6 +492,7 @@ public class HimnosView implements IsWidget  {
 	
 	private void ActualizarHimnos(int id, String numero, String name, ArrayList<String> lyrics)
 	{
+		panel.setHeadingText("Himnos");
 		panel.setWidget(vlcontainer);
 	    store.clear();		   
 		for (int i = 0; i < himnos.size(); i++) {

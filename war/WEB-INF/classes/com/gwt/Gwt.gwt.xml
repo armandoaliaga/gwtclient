@@ -20,6 +20,8 @@
  <inherits name='com.sencha.gxt.ui.GXT' />
  <inherits name="com.google.gwt.http.HTTP" />
 
+  <inherits name="gwtupload.GWTUpload"/>
+  
  <!-- GXT Stylesheet -->
 <stylesheet src="reset.css" />
 
