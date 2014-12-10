@@ -16,6 +16,7 @@ import com.google.gwt.media.client.Audio;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -241,12 +242,20 @@ public class RowExpanderGrid implements IsWidget {
 	      l.add(lastCol);
 	      l.add(changeCol);
 	      l.add(lastTransCol);
-	      l.add(playcolumn);
+	      l.add(playcolumn);	 
 	      l.add(pausecolumn);
 	      l.add(downloadcolumn);
-	      l.add(editcolumn);
-	      l.add(deletecolumn);
-	      ColumnModel<Sermon> cm = new ColumnModel<Sermon>(l);
+	     
+	      if(Cookies.getCookie("userid")==null)
+          	Cookies.setCookie("userid","");
+          String userid=Cookies.getCookie("userid");		            
+          if(!userid.isEmpty())
+          {		      
+		      l.add(editcolumn);
+		      l.add(deletecolumn);
+          }
+	      
+          ColumnModel<Sermon> cm = new ColumnModel<Sermon>(l);
 	 
 	      store = new ListStore<Sermon>(props.key());	      
 		  store.addAll(sermones);	      

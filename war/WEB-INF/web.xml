@@ -101,6 +101,15 @@
     <url-pattern>/gwt/UploadDropbox</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>LoginServiceImpl</servlet-name>
+    <servlet-class>com.gwt.server.LoginServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>LoginServiceImpl</servlet-name>
+    <url-pattern>/gwt/Login</url-pattern>
+  </servlet-mapping>
   
   
   

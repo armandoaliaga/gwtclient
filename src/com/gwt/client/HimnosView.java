@@ -13,6 +13,7 @@ import com.google.gwt.media.client.Audio;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ClientBundle.Source;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -186,8 +187,15 @@ public class HimnosView implements IsWidget  {
 		    l.add(numbercol);
 		    l.add(nameCol);
 		    l.add(downloadcolumn);
-		    l.add(editcolumn);
-		    l.add(deletecolumn); 
+		    
+		    if(Cookies.getCookie("userid")==null)
+            	Cookies.setCookie("userid","");
+            String userid=Cookies.getCookie("userid");		            
+            if(!userid.isEmpty())
+            {
+            	l.add(editcolumn);
+            	l.add(deletecolumn);
+            }
 		    ColumnModel<Himno> cm = new ColumnModel<Himno>(l);
 		    store = new ListStore<Himno>(props.key());			   
 			store.addAll(himnos);	

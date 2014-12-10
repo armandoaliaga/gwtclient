@@ -23,6 +23,7 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -32,8 +33,11 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Tree;
@@ -45,14 +49,18 @@ import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 
 
-
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.PasswordField;
+import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.info.Info;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.ibm.icu.text.MessagePatternUtil.ComplexArgStyleNode;
 import com.sencha.gxt.cell.core.client.ButtonCell.IconAlign;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.core.client.util.Padding;
@@ -60,6 +68,7 @@ import com.sencha.gxt.core.client.util.ToggleGroup;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
+import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.button.ToggleButton;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderLayoutData;
@@ -70,6 +79,7 @@ import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer.HBoxLayou
 import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VBoxLayoutContainer.VBoxLayoutAlign;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sun.java.swing.plaf.windows.resources.windows;
 
 /**
@@ -80,7 +90,7 @@ public class Gwt implements IsWidget, EntryPoint {
 	private ArrayList<Himno> himnosgrid=null;
 	private static final String JSON_URL = GWT.getModuleBaseURL() + "sermones";
 	private static final String JSON_URL_HIMNOS = GWT.getModuleBaseURL() + "himnos";
-	
+	final LoginServiceAsync loginservice= GWT.create(LoginService.class);
 
 	  private ContentPanel lccenter;
 	  private ToggleGroup toggleGroup = new ToggleGroup();	 
@@ -181,120 +191,144 @@ public class Gwt implements IsWidget, EntryPoint {
 	          }
 	        }
 	      }), vBoxData);
-	 
-	      lcwest.add(createToggleButton("Subir Sermon", new ValueChangeHandler<Boolean>() {
-	        @Override
-	        public void onValueChange(ValueChangeEvent<Boolean> event) {
-	          if (event.getValue()) {
-
-		            final AutoProgressMessageBox box = new AutoProgressMessageBox("En progreso", "cargando, aguarde por favor...");
-		  	          box.setProgressText("Cargando...");
-		  	          box.auto();
-		  	          box.show();
-		  	         Timer t = new Timer() {
-		    	            @Override
-		    	            public void run() {		    	            		    	              
-		    	              box.hide();
-		    	            }
-		    	          };
-		    	          t.schedule(3000);
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.TOP);
-	            
-	            UploadSermonForm a= new UploadSermonForm();	         
-	            c.add(a.asWidget()); 
-	              
-	            addToCenter(c);
-	          }
-	        }
-	      }), vBoxData);
-	 
+	      
+	      
 	      lcwest.add(createToggleButton("Himnos", new ValueChangeHandler<Boolean>() {
+		        @Override
+		        public void onValueChange(ValueChangeEvent<Boolean> event) {
+		          if (event.getValue()) {
+		        	final HBoxLayoutContainer c = new HBoxLayoutContainer();
+		            c.setPadding(new Padding(5));
+		            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
+		            c.setPack(BoxLayoutPack.CENTER);
+		 	        himnosgrid = new ArrayList<>();   
+		 	        String url = URL.encode(JSON_URL_HIMNOS);		 	      
+		    		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+		    		
+		    		try 
+		    		{
+	    		    	Request request = builder.sendRequest(null, new RequestCallback() {
+	    		        @Override
+	    				public void onError(Request request, Throwable exception) {
+	    		         // displayError("Couldn't retrieve JSON");		    		        	
+	    		        }
+
+	    		        @Override
+	    				public void onResponseReceived(Request request, Response response) {
+	    		          if (200 == response.getStatusCode()) {
+	    		        	  JsArray<HimnoData> himnos= JsonUtils.safeEval(response.getText());		    		        	  		    		        	 		    		        	   		 		
+	    		  		    
+	    		        	  for (int i = 0; i < himnos.length(); i++) {		    		        		  
+	    		        		  Himno nhimno=new Himno(himnos.get(i).getId(),himnos.get(i).getNumber(), himnos.get(i).getName(), himnos.get(i).getLyrics(), himnos.get(i).getShareableUrl());    		        		  
+	    		        		  himnosgrid.add(nhimno);		    		        		  
+	    		        	    }    		        	  
+	    		        	  HimnosView himnosview= new HimnosView(himnosgrid);
+	    				      c.add(himnosview.asWidget());	        	      		        	 
+	    		          } else {
+	    		            //displayError("Couldn't retrieve JSON (" + response.getStatusText()+ ")");		    		        	  
+	    		          }
+	    		        }
+	    		      });
+	    		    } catch (RequestException e) {
+	    		      //displayError("Couldn't retrieve JSON");		    		 
+	    		    }	
+		    	
+		    		final AutoProgressMessageBox box = new AutoProgressMessageBox("En progreso", "Recuperando himnos, aguarde por favor...");
+	   	          	box.setProgressText("Cargando...");
+	   	          	box.auto();
+	   	          	box.show();
+	   	          	Timer t = new Timer() {
+	    	            @Override
+	    	            public void run() {		    	            	
+	    	              Info.display("Mensaje", "Himnos cargados con exito!");
+	    	              box.hide();
+	    	            }
+	   	          	};
+	   	          	t.schedule(3000);	    		
+		            addToCenter(c);
+		          }
+		        }
+		      }), vBoxData);
+	      
+	      lcwest.add(createToggleButton("Nuevo Sermon", new ValueChangeHandler<Boolean>() {
 	        @Override
 	        public void onValueChange(ValueChangeEvent<Boolean> event) {
 	          if (event.getValue()) {
-	        	final HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
-	            c.setPack(BoxLayoutPack.CENTER);
-	 	        himnosgrid = new ArrayList<>();   
-	 	        String url = URL.encode(JSON_URL_HIMNOS);		 	      
-	    		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
-	    		
-	    		try 
-	    		{
-    		    	Request request = builder.sendRequest(null, new RequestCallback() {
-    		        @Override
-    				public void onError(Request request, Throwable exception) {
-    		         // displayError("Couldn't retrieve JSON");		    		        	
-    		        }
+	        	  
+	    	      if(Cookies.getCookie("userid")==null)
+	    	          	Cookies.setCookie("userid","");
+	    	          String userid=Cookies.getCookie("userid");		            
+	    	          if(!userid.isEmpty())
+	    	          {
 
-    		        @Override
-    				public void onResponseReceived(Request request, Response response) {
-    		          if (200 == response.getStatusCode()) {
-    		        	  JsArray<HimnoData> himnos= JsonUtils.safeEval(response.getText());		    		        	  		    		        	 		    		        	   		 		
-    		  		    
-    		        	  for (int i = 0; i < himnos.length(); i++) {		    		        		  
-    		        		  Himno nhimno=new Himno(himnos.get(i).getId(),himnos.get(i).getNumber(), himnos.get(i).getName(), himnos.get(i).getLyrics(), himnos.get(i).getShareableUrl());    		        		  
-    		        		  himnosgrid.add(nhimno);		    		        		  
-    		        	    }    		        	  
-    		        	  HimnosView himnosview= new HimnosView(himnosgrid);
-    				      c.add(himnosview.asWidget());	        	      		        	 
-    		          } else {
-    		            //displayError("Couldn't retrieve JSON (" + response.getStatusText()+ ")");		    		        	  
-    		          }
-    		        }
-    		      });
-    		    } catch (RequestException e) {
-    		      //displayError("Couldn't retrieve JSON");		    		 
-    		    }	
-	    	
-	    		final AutoProgressMessageBox box = new AutoProgressMessageBox("En progreso", "Recuperando himnos, aguarde por favor...");
-   	          	box.setProgressText("Cargando...");
-   	          	box.auto();
-   	          	box.show();
-   	          	Timer t = new Timer() {
-    	            @Override
-    	            public void run() {		    	            	
-    	              Info.display("Mensaje", "Himnos cargados con exito!");
-    	              box.hide();
-    	            }
-   	          	};
-   	          	t.schedule(3000);	    		
-	            addToCenter(c);
+				            final AutoProgressMessageBox box = new AutoProgressMessageBox("En progreso", "cargando, aguarde por favor...");
+				  	          box.setProgressText("Cargando...");
+				  	          box.auto();
+				  	          box.show();
+				  	         Timer t = new Timer() {
+				    	            @Override
+				    	            public void run() {		    	            		    	              
+				    	              box.hide();
+				    	            }
+				    	          };
+				    	          t.schedule(3000);
+			            HBoxLayoutContainer c = new HBoxLayoutContainer();
+			            c.setPadding(new Padding(5));
+			            c.setHBoxLayoutAlign(HBoxLayoutAlign.TOP);
+			            
+			            UploadSermonForm a= new UploadSermonForm();	         
+			            c.add(a.asWidget()); 
+			              
+			            addToCenter(c);
+	    	          }
+	    	          else
+	    	          {
+	    	        	  Window.alert("Debe loguearse como administrador.");		
+	    	          }
 	          }
 	        }
 	      }), vBoxData);
 	 
-	      lcwest.add(createToggleButton("Subir Himno", new ValueChangeHandler<Boolean>() {
+	     
+	 
+	      lcwest.add(createToggleButton("Nuevo Himno", new ValueChangeHandler<Boolean>() {
 	        @Override
 	        public void onValueChange(ValueChangeEvent<Boolean> event) {
 	          if (event.getValue()) {
-	            HBoxLayoutContainer c = new HBoxLayoutContainer();
-	            c.setPadding(new Padding(5));
-	            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
-	            c.setPack(BoxLayoutPack.CENTER);
-	 
-	            UploadHimnoForm a=new UploadHimnoForm();
-	            c.add(a.asWidget());
-	           
-	           /* final Dialog simple = new Dialog();
-	            simple.setHeadingText("Dialog Test");
-	            simple.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.NO);
-	            simple.setBodyStyleName("pad-text");
-	            simple.add(new Label("un poco de texto jaja"));
-	            simple.getBody().addClassName("pad-text");
-	            simple.setHideOnButtonClick(true);
-	            simple.setWidth(300);
-	            simple.add(new Button("asdsa"));
-	            simple.show();*/
-	            addToCenter(c);
+	        	  if(Cookies.getCookie("userid")==null)
+    	          	Cookies.setCookie("userid","");
+    	          String userid=Cookies.getCookie("userid");		            
+    	          if(!userid.isEmpty())
+    	          {
+		            HBoxLayoutContainer c = new HBoxLayoutContainer();
+		            c.setPadding(new Padding(5));
+		            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
+		            c.setPack(BoxLayoutPack.CENTER);
+		 
+		            UploadHimnoForm a=new UploadHimnoForm();
+		            c.add(a.asWidget());
+		           
+		           /* final Dialog simple = new Dialog();
+		            simple.setHeadingText("Dialog Test");
+		            simple.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.NO);
+		            simple.setBodyStyleName("pad-text");
+		            simple.add(new Label("un poco de texto jaja"));
+		            simple.getBody().addClassName("pad-text");
+		            simple.setHideOnButtonClick(true);
+		            simple.setWidth(300);
+		            simple.add(new Button("asdsa"));
+		            simple.show();*/
+		            addToCenter(c);
+    	          }
+    	          else
+    	          {
+    	        	  Window.alert("Debe loguearse como administrador.");		
+    	          }
 	          }
 	        }
 	      }), vBoxData);	
 	      
-	      lcwest.add(createToggleButton("Default", new ValueChangeHandler<Boolean>() {
+	      lcwest.add(createToggleButton("Menu Login", new ValueChangeHandler<Boolean>() {
 		        @Override
 		        public void onValueChange(ValueChangeEvent<Boolean> event) {
 		          if (event.getValue()) {
@@ -302,11 +336,108 @@ public class Gwt implements IsWidget, EntryPoint {
 		            c.setPadding(new Padding(5));
 		            c.setHBoxLayoutAlign(HBoxLayoutAlign.STRETCH);
 		            c.setPack(BoxLayoutPack.CENTER);
+		            		            
+		            if(Cookies.getCookie("userid")==null)
+		            	Cookies.setCookie("userid","");
+		            String userid=Cookies.getCookie("userid");		            
+		            if(userid.isEmpty())
+		            {
+		            
+		            FramedPanel panel = new FramedPanel();
+		            panel.setHeadingText("Log in");
+		            panel.setWidth(350);
+		            panel.setBodyStyle("background: none; padding: 15px");		        
+		            
+		            VerticalLayoutContainer p = new VerticalLayoutContainer();
+		            panel.add(p);
+			   		 final TextBox username=new TextBox();			   		 
+			   		 username.setMaxLength(30);				   		
+			   		 final PasswordTextBox pass=new PasswordTextBox();		
+			   		 Button Login=new Button("Log in");
+			   		 
+			   		 Login.addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							
+							loginservice.Login(username.getValue(), pass.getValue(), new AsyncCallback<String>() {
+
+								@Override
+								public void onFailure(Throwable caught) {
+									// TODO Auto-generated method stub
+									
+								}
+
+								@Override
+								public void onSuccess(String result) {
+									if(result.isEmpty())
+										Window.alert("Intento de ingreso insatisfactorio.");
+									else									
+									{
+										String sessionID = result;
+									    final long DURATION = 1000 * 60 * 60 * 24 * 14; //duration remembering login. 2 weeks in this example.
+									    Date expires = new Date(System.currentTimeMillis() + DURATION);
+									    Cookies.setCookie("userid", sessionID, expires, null, "/", false);	
+									    Window.alert("Log in satisfactorio.");									    
+									}
+								}
+							});
+						}
+			   		 });
+			   		 
+			   		 
+			   		 p.add(new FieldLabel(username, "User Name"), new VerticalLayoutData(1, -1));
+			   		 p.add(new FieldLabel(pass, "Password"), new VerticalLayoutData(1, -1));
+			   		 p.add(Login, new VerticalLayoutData(1, -1));
+			   		 
+			   		 
+		            com.sencha.gxt.widget.core.client.Window complex = new com.sencha.gxt.widget.core.client.Window();
+		            complex.setMaximizable(true);		
+		            complex.setHeadingText("Menu");		         
+		            complex.setWidth(500);
+		            complex.setHeight(200);
+		            complex.add(panel);
+		            
+		            complex.show();
+		            
+		            }
+		            else
+		            {
+		            	 FramedPanel panel = new FramedPanel();
+		            	 panel.setHeadingText("Log out");
+		            	 panel.setWidth(350);
+		            	 panel.setBodyStyle("background: none; padding: 15px");		        
+			            
+		            	 VerticalLayoutContainer p = new VerticalLayoutContainer();
+		            	 panel.add(p);
+		            	 Button logout=new Button("Log out");
+		            	 
+		            	 logout.addClickHandler(new ClickHandler() {
+							
+							@Override
+							public void onClick(ClickEvent event) {
+								 Cookies.setCookie("userid","");	
+								  Window.alert("Log out satisfactorio.");
+								
+							}
+						});
+		            	 p.add(logout, new VerticalLayoutData(1, -1));   			            	 		          
+					   		 
+		            	com.sencha.gxt.widget.core.client.Window complex = new com.sencha.gxt.widget.core.client.Window();
+			            complex.setMaximizable(true);		
+			            complex.setHeadingText("Menu");		         
+			            complex.setWidth(500);
+			            complex.setHeight(200);
+			            complex.add(panel);
+			            
+			            complex.show();
+		            }
+		            
 		            addToCenter(c);
 		          }
 		        }
 		      }), vBoxData);	
-	      lcwest.add(createToggleButton("Default", new ValueChangeHandler<Boolean>() {
+	      lcwest.add(createToggleButton("", new ValueChangeHandler<Boolean>() {
 		        @Override
 		        public void onValueChange(ValueChangeEvent<Boolean> event) {
 		          if (event.getValue()) {
@@ -342,19 +473,23 @@ public class Gwt implements IsWidget, EntryPoint {
 		    cont++;
 		    break;
 	    case 2:
-		    button.setIcon(Images.INSTANCE.logo2());
+	    	button.setIcon(Images.INSTANCE.himnos());
 		    cont++;
 		    break;	
 	    case 3:
-		    button.setIcon(Images.INSTANCE.himnos());
+	    	button.setIcon(Images.INSTANCE.addsermon());
 		    cont++;
 		    break;	
 	    case 4:
-		    button.setIcon(Images.INSTANCE.logo2());		    
+		    button.setIcon(Images.INSTANCE.addhimno());		    
+		    cont++;
+		    break;	
+	    case 5:
+		    button.setIcon(Images.INSTANCE.menulogin());		    
 		    cont++;
 		    break;	
 		default:
-			button.setIcon(Images.INSTANCE.default1());
+			//button.setIcon(Images.INSTANCE.default1());
 			break;
 	    }
 	    return button;
@@ -372,14 +507,14 @@ public class Gwt implements IsWidget, EntryPoint {
 		  @Source("bible1.png")
 		  ImageResource logo();
 		  
-		  @Source("add2.png")
-		  ImageResource logo2();
+		  @Source("addsermon.png")
+		  ImageResource addsermon();
 		  
-		  @Source("default.png")
-		  ImageResource default1();
+		  @Source("menulogin.png")
+		  ImageResource menulogin();
 		  
-		  @Source("Add3.png")
-		  ImageResource add3();
+		  @Source("addhimno.png")
+		  ImageResource addhimno();
 		  
 		  @Source("himnos.png")
 		  ImageResource himnos();
